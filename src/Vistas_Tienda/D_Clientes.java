@@ -375,6 +375,8 @@ public class D_Clientes extends javax.swing.JFrame {
         btnBuscarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenClientes/buscar.png"))); // NOI18N
         btnBuscarCliente.setText("Buscar");
         btnBuscarCliente.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(216, 154, 132), 1, true));
+        btnBuscarCliente.setDisabledIcon(null);
+        btnBuscarCliente.setDisabledSelectedIcon(null);
         btnBuscarCliente.setFocusPainted(false);
         btnBuscarCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
