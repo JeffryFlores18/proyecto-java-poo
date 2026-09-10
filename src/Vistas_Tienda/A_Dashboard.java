@@ -18,7 +18,7 @@ public class A_Dashboard extends javax.swing.JFrame {
         content.revalidate();
         content.repaint();
     }
-    
+    //hola hola 
     public A_Dashboard() {
         initComponents();
         B_Resumen viewResumen = new B_Resumen();
