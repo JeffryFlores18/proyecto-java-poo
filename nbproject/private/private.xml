@@ -3,14 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/PC/OneDrive/Desktop/FloresAlvarez/PROYECTO%20POO%20TIENDA/src/A_Dashboard.java</file>
-            <file>file:/C:/Users/PC/OneDrive/Desktop/FloresAlvarez/PROYECTO%20POO%20TIENDA/src/B_Resumen.java</file>
-            <file>file:/C:/Users/PC/OneDrive/Desktop/FloresAlvarez/PROYECTO%20POO%20TIENDA/src/C_Productos.java</file>
-            <file>file:/C:/Users/PC/OneDrive/Desktop/FloresAlvarez/PROYECTO%20POO%20TIENDA/src/D_Clientes.java</file>
-            <file>file:/C:/Users/PC/OneDrive/Desktop/FloresAlvarez/PROYECTO%20POO%20TIENDA/src/E_Ventas.java</file>
-            <file>file:/C:/Users/PC/OneDrive/Desktop/FloresAlvarez/PROYECTO%20POO%20TIENDA/src/F_Proveedores.java</file>
-            <file>file:/C:/Users/PC/OneDrive/Desktop/FloresAlvarez/PROYECTO%20POO%20TIENDA/src/G_Reportes.java</file>
-            <file>file:/C:/Users/PC/OneDrive/Desktop/FloresAlvarez/PROYECTO%20POO%20TIENDA/src/AA_Login.java</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/FloresAlvarez/PROYECTO%20POO%20TIENDA/src/Vistas_Tienda/AA_Login.java</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/FloresAlvarez/PROYECTO%20POO%20TIENDA/src/Vistas_Tienda/A_Dashboard.java</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/FloresAlvarez/PROYECTO%20POO%20TIENDA/src/Vistas_Tienda/D_Clientes.java</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/FloresAlvarez/PROYECTO%20POO%20TIENDA/src/Vistas_Tienda/B_Resumen.java</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/FloresAlvarez/PROYECTO%20POO%20TIENDA/src/Vistas_Tienda/C_Productos.java</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/FloresAlvarez/PROYECTO%20POO%20TIENDA/src/Vistas_Tienda/E_Ventas.java</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/FloresAlvarez/PROYECTO%20POO%20TIENDA/src/Vistas_Tienda/F_Proveedores.java</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/FloresAlvarez/PROYECTO%20POO%20TIENDA/src/Vistas_Tienda/G_Reportes.java</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/FloresAlvarez/PROYECTO%20POO%20TIENDA/src/Vistas_Tienda/C_Productos_DetallesProducto.java</file>
         </group>
     </open-files>
 </project-private>
