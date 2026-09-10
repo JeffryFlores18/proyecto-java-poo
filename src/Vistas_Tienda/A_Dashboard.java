@@ -148,7 +148,7 @@ public class A_Dashboard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnResumenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResumenActionPerformed
-        C_Productos p = new C_Productos();
+        B_Resumen p = new B_Resumen();
         mostrarPanel(p);
     }//GEN-LAST:event_btnResumenActionPerformed
 
@@ -160,8 +160,8 @@ public class A_Dashboard extends javax.swing.JFrame {
 
     private void btnClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientesActionPerformed
         // TODO add your handling code here:
-        E_Ventas p = new E_Ventas();
-        mostrarPanel(p);
+        //D_Clientes p = new D_Clientes();
+        //mostrarPanel(p);
     }//GEN-LAST:event_btnClientesActionPerformed
 
     private void btnVentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVentasActionPerformed
