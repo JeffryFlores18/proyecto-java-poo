@@ -9,12 +9,12 @@ package Vistas_Tienda;
  *
  * @author PC
  */
-public class F_Proveedores extends javax.swing.JPanel {
+public class ProveedorEditar extends javax.swing.JPanel {
 
     /**
      * Creates new form B_Resumen
      */
-    public F_Proveedores() {
+    public ProveedorEditar() {
         initComponents();
     }
 

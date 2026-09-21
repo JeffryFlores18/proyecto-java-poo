@@ -174,7 +174,7 @@ public class A_Dashboard extends javax.swing.JFrame {
     private void btnProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProveedoresActionPerformed
         // TODO add your handling code here:
         
-        F_Proveedores p = new F_Proveedores();
+        ProveedorEditar p = new ProveedorEditar();
         mostrarPanel(p);
     }//GEN-LAST:event_btnProveedoresActionPerformed
 
