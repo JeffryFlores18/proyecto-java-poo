@@ -182,7 +182,7 @@ public class ProveedorAgregar extends javax.swing.JPanel {
         }
 
         // 7. Verificar si el RUC ya existe
-        for (String[] proveedor : Proveedores.proveedores) {
+        /*for (String[] proveedor : Proveedores.proveedores) {
 
             if (proveedor[1].equals(ruc)) {
 
@@ -238,11 +238,11 @@ public class ProveedorAgregar extends javax.swing.JPanel {
 
         // 12. Regresar a Proveedores
         Proveedores ventana = new Proveedores();
-        ventana.setVisible(true);
+        ventana.setVisible(true);*/
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        this.dispose();
+        /*this.dispose();*/
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
