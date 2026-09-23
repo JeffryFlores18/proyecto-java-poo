@@ -2,71 +2,164 @@
 package Vistas_Tienda;
 
 import java.awt.Color;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 
 public class D_FromCliente extends javax.swing.JFrame {
 
 
-    private D_Clientes ventanaClientes;
-    private D_clientees clienteEditar;
-    private  boolean modoEditar = false;
+    private D_Clientesp ventanaClientes;
+    private int idclienteEditar = 0;
+    
+ 
     
     
     public D_FromCliente() {
         initComponents();
-        cbxTipoDocumento.setBackground(new Color(255,248,250));
-        cbxTipoDocumento.setOpaque(true);
         
-    }
-
-    public D_FromCliente(D_Clientes ventanaClientes, D_clientees clienteEditar) {
-        this.ventanaClientes = ventanaClientes;
-        this.clienteEditar = clienteEditar;
-        initComponents();
-
-        this.ventanaClientes = ventanaClientes;
-        this.clienteEditar = clienteEditar;
+        prepararRegistro();
         setLocationRelativeTo(null);
-
-        if (clienteEditar == null) {
-            prepararRegistro();
-        } else {
-            prepararEdicion();
-        }
-
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+ 
     }
+
+    public D_FromCliente(D_Clientesp ventanaClientes) {
+        this();
+        this.ventanaClientes = ventanaClientes;
+        setLocationRelativeTo(ventanaClientes);
+    }
+
+    public D_FromCliente(D_Clientesp ventanaClientes, D_clientees cliente) {
+        this(ventanaClientes);
+        idclienteEditar = cliente.getIDcliente();
+        txtidCliente.setText(String.valueOf(cliente.getIDcliente()));
+        txtdni.setText(cliente.getDni());
+        txtnombre.setText(cliente.getNombre());
+        txttelefono.setText(cliente.getTelefono());
+      
+        btnguardar.setText("Guardar cambios");
+    }
+    
+    
+    
     
     private void prepararRegistro(){
-        modoEditar = false;
+        txtidCliente.setText("Automatico");
+        txtidCliente.setEditable(false);
         
-        lbltituloFormulario.setText("REGISTRAR CLIENTE");
-        lblsubtitulo.setText("Complete los datos del cliente");
-        btnguardar.setText("Confirmar");
-        
-        txtidCliente.setText(ventanaClientes.generarNuevoID());
-        cbxTipoDocumento.setSelectedItem("DNI");
-        
-        txtDocumento.setText("");
+        txtdni.setText("");
         txtnombre.setText("");
         txttelefono.setText("");
-        txtidCliente.setEditable(false);
+
+        btnguardar.setText("Confirmar");
     }
     
-    private void prepararEdicion(){
-        modoEditar = true;
-        lbltituloFormulario.setText("EDITAR CLIENTE");
-        lblsubtitulo.setText("Modifique los datos del cliente");
-        btnguardar.setText("Guardar");
+    
+    private boolean validarDatos(){
+        String dni = txtdni.getText().trim();
+        String nombre = txtnombre.getText().trim();
+        String telefono = txttelefono.getText().trim();
         
-        txtidCliente.setText(clienteEditar.getIDcliente());
-        cbxTipoDocumento.setSelectedItem(clienteEditar.getTipoDocumento());
-        txtDocumento.setText(clienteEditar.getNumeroDocumento());
-        txtnombre.setText(clienteEditar.getNombre());
-        txttelefono.setText(clienteEditar.getTelefono());
-        txtidCliente.setEditable(false);
-        
+        if (dni.isEmpty() ||nombre.isEmpty() || telefono.isEmpty()) {
+           JOptionPane.showMessageDialog( this,"Complete todos los campos." );
+           return false;
+        }
+        if (!dni.matches("[0-9]{8}")) {
+            JOptionPane.showMessageDialog(this, "El DNI debe contener 8 dígitos.");
+            txtdni.requestFocusInWindow();
+            return false;
+        }
+        if (nombre.equals("")) {
+            JOptionPane.showMessageDialog(this,"Ingrese nombre.");
+            txtnombre.requestFocusInWindow();
+            return false;
+        }
+        if (!telefono.matches("[0-9]{9}")) {
+            JOptionPane.showMessageDialog(this, "El teléfono debe contener 9 dígitos.");
+            txttelefono.requestFocusInWindow();
+            return false;
+        }
+       return true;
     }
+    
+    //Este método actualizará la tabla y cerrará el formulario. También servirá al editar
+    private void finalizarGuardado(String mensaje) {
+
+        JOptionPane.showMessageDialog(this, mensaje);
+        if (ventanaClientes != null) {
+            ventanaClientes.cargarClientes();
+        }
+        dispose();
+    }
+    
+    private void registrarCliente (){
+        if (!validarDatos()) {
+            return;
+        }
+        String sql = "INSERT INTO cliente (dni, nombre, telefono) "+ "VALUES (?, ?, ?)";
+        
+        try(Connection con = conexionLiv.conectar()) {
+            if (con == null) {
+               JOptionPane.showMessageDialog(this,"No se pudo conectar con la base de datos." );
+            return; 
+            }
+            
+            try(PreparedStatement ps = con.prepareStatement(sql)) {
+              ps.setString(1, txtdni.getText().trim());
+              ps.setString(2, txtnombre.getText().trim());
+              ps.setString(3, txttelefono.getText().trim());
+              
+              int filas = ps.executeUpdate();
+                if (filas==1) {
+                    finalizarGuardado("Cliente registrado correctamente.");
+                }
+            } 
+            
+        } catch (SQLException e) {
+            if (e.getErrorCode()==1062) {
+                JOptionPane.showMessageDialog(this, "Ya existe un cliente con ese DNI.");
+            }else{
+                JOptionPane.showMessageDialog(this,"Error al registrar cliente: "+e.getMessage());
+            }
+        }
+    }
+     
+    public  void editarCliente(){
+        if (!validarDatos()) {
+            return;
+        }
+        String sql = "UPDATE cliente "+"SET dni = ?,nombre = ?, telefono = ? "+"WHERE id_cliente = ?" ;
+        
+        try(Connection con = conexionLiv.conectar()) {
+            if (con ==null) {
+               JOptionPane.showMessageDialog(this, "No se pudo conectar con la base de datos");
+               return;
+            }
+            try(PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setString(1, txtdni.getText().trim());
+                ps.setString(2, txtnombre.getText().trim());
+                ps.setString(3, txttelefono.getText().trim());
+                ps.setInt(4,idclienteEditar);
+                int filas = ps.executeUpdate();
+                
+                if (filas>0) {
+                    finalizarGuardado("Cliente actualizado correctamente.");
+                }else{
+                    JOptionPane.showMessageDialog(this, "No se realizaron cambios. "+"Actualice la tabla para comprobar si el cliente todavia existe.");
+                }     
+            }      
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 1062) {
+                JOptionPane.showMessageDialog(this, "Ese DNI ya pertenece a otro cliente");
+            }else{
+                JOptionPane.showMessageDialog(this, "Error al editar cliente: "+e.getMessage());
+            }       
+        }
+    }
+    
     
     
     
@@ -82,9 +175,8 @@ public class D_FromCliente extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         txtidCliente = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        cbxTipoDocumento = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
-        txtDocumento = new javax.swing.JTextField();
+        txtdni = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         txtnombre = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
@@ -129,22 +221,17 @@ public class D_FromCliente extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(58, 42, 38));
-        jLabel3.setText("Tipo de documento:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 120, 40));
-
-        cbxTipoDocumento.setForeground(new java.awt.Color(58, 42, 38));
-        cbxTipoDocumento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "DNI", "RUC" }));
-        cbxTipoDocumento.setOpaque(true);
-        jPanel1.add(cbxTipoDocumento, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 140, 140, 40));
+        jLabel3.setText(" Datos:");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 140, 120, 40));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(58, 42, 38));
-        jLabel6.setText("DNI/RUC:");
+        jLabel6.setText("DNI:");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 100, 40));
 
-        txtDocumento.setBackground(new java.awt.Color(255, 248, 250));
-        txtDocumento.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(232, 216, 208)));
-        jPanel1.add(txtDocumento, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 200, 200, 30));
+        txtdni.setBackground(new java.awt.Color(255, 248, 250));
+        txtdni.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(232, 216, 208)));
+        jPanel1.add(txtdni, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 200, 200, 30));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(58, 42, 38));
@@ -224,83 +311,11 @@ public class D_FromCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_btnguardarMouseExited
 
     private void btnguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardarActionPerformed
-         String id = txtidCliente.getText();
-         String tipo = cbxTipoDocumento.getSelectedItem().toString();
-         String documento = txtDocumento.getText().trim();
-         String nombre = txtnombre.getText().trim();
-         String telefono = txttelefono.getText().trim();
-         
-         if (documento.isEmpty() || nombre.isEmpty() || telefono.isEmpty()) {
-             JOptionPane.showMessageDialog( this, "Complete todos los campos.", "Datos incompletos", JOptionPane.WARNING_MESSAGE
-         );
-
-        return;
-        }
-         
-         // validacion DNI
-        if (tipo.equals("DNI")) {
-            if (!documento.matches("\\d{8}")) {
-                 JOptionPane.showMessageDialog( this,  "El DNI debe contener 8 dígitos."
-            );
-
-            return;
-            }
-        }
-        
-        // validacion RUC
-        if (tipo.equals("RUC")) {
-            if (!documento.matches("\\d{11}")) {
-                 JOptionPane.showMessageDialog( this,  "El RUC debe contener 11 dígitos."
-            );
-
-            return;
-            }
-        }
-        
-        if (!telefono.matches("\\d{9}")) {
-
-        JOptionPane.showMessageDialog(
-                this,
-                "El teléfono debe contener 9 dígitos."
-        );
-
-        return;
-    }
-        D_clientees encontrado = ventanaClientes.buscarClientePorDocumento(documento);
-        
-        if (!modoEditar) {
-             if (encontrado != null) {
-
-            JOptionPane.showMessageDialog( this,    "Ya existe un cliente con ese DNI/RUC.");
-            return;
-        }
-
-    } else {
-
-        if (encontrado != null && !encontrado.getIDcliente().equals(clienteEditar.getIDcliente())) {
-
-            JOptionPane.showMessageDialog( this, "Ese DNI/RUC ya pertenece a otro cliente.");
-            return;
-        }
-        }
-        
-        
-        if (modoEditar) {
-            clienteEditar.setTipoDocumento(tipo);
-            clienteEditar.setNumeroDocumento(documento);
-            clienteEditar.setNombre(nombre);
-            clienteEditar.setTelefono(telefono);
-            
-            ventanaClientes.cargarTabla();
-            JOptionPane.showMessageDialog(this,"Cliente actualizado correctamente.", "Editar Cliente",JOptionPane.INFORMATION_MESSAGE);
-            dispose();
+        if (idclienteEditar==0) {
+            registrarCliente();
         }else{
-            D_clientees nuevoCliente = new D_clientees(id, tipo, documento, nombre, telefono);
-            ventanaClientes.agregarCliente(nuevoCliente);
-            JOptionPane.showMessageDialog(this,"Cliente registrado correctamente.", "Registrar Cliente",JOptionPane.INFORMATION_MESSAGE);
-            dispose();
+            editarCliente();
         }
-  
         
     }//GEN-LAST:event_btnguardarActionPerformed
 
@@ -321,7 +336,6 @@ public class D_FromCliente extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnguardar;
-    private javax.swing.JComboBox<String> cbxTipoDocumento;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -330,7 +344,7 @@ public class D_FromCliente extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblsubtitulo;
     private javax.swing.JLabel lbltituloFormulario;
-    private javax.swing.JTextField txtDocumento;
+    private javax.swing.JTextField txtdni;
     private javax.swing.JTextField txtidCliente;
     private javax.swing.JTextField txtnombre;
     private javax.swing.JTextField txttelefono;

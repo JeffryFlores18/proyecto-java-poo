@@ -3,110 +3,143 @@ package Vistas_Tienda;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-public class D_Clientes extends javax.swing.JFrame {
 
+
+public class D_Clientesp extends javax.swing.JPanel {
+   
  
-    private ArrayList<D_clientees>listaClientes = new ArrayList<>();
-    
-    
-    
-    public D_Clientes() {
+    public D_Clientesp() {
         initComponents();
         this.setSize(800, 700);
-        EncabezadoTabla();
-        FechaHora();
-       cargarDatosPrueba();
-       cargarTabla();
-    }
-    
-    public void cargarDatosPrueba(){
         
-        listaClientes.add(new D_clientees("CLI001", "DNI","76543210", "María López", "987654321"));
-        listaClientes.add(new D_clientees("CLI002", "DNI", "09653218", "Luis Benavides Prado", "955123456"));
-        listaClientes.add(new D_clientees("CLI003", "RUC", "20123456789", "Empresa ABC S.A.C.", "945123678"));
-      
+        EncabezadoTabla();
+        cargarClientes();
+        
+        FechaHora();
+//        cargarTabla();
     }
     
-    public void cargarTabla(){
+    public void cargarClientes(){
         DefaultTableModel modelo = (DefaultTableModel) tblClientes.getModel();
         modelo.setRowCount(0);
-        
-        for (D_clientees cliente : listaClientes) {
+        String sql = "SELECT id_cliente, dni, nombre, telefono "+ "FROM cliente " + "ORDER BY id_cliente";
+        try {
 
-        Object[] fila = {
-            cliente.getIDcliente(),
-            cliente.getTipoDocumento(),
-            cliente.getNumeroDocumento(),
-            cliente.getNombre(),
-            cliente.getTelefono()
-        };
+        Connection con = conexionLiv.conectar();
 
-        modelo.addRow(fila);
-    }
+        PreparedStatement ps = con.prepareStatement(sql);
 
-    lblTotalClientes.setText(
-            "Total clientes: " + listaClientes.size()
-    );
-        
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+
+            Object[] fila = {
+
+                rs.getInt("id_cliente"),
+                rs.getString("dni"),
+                rs.getString("nombre"),
+                rs.getString("telefono")
+            };
+
+            modelo.addRow(fila);
+        }
+        lblTotalClientes.setText("Total clientes: "+modelo.getRowCount());
+        rs.close();
+        ps.close();
+        con.close();
+        } catch(Exception e){
+            JOptionPane.showMessageDialog(this, "Error al cargar clientes: "+e.getMessage());
+        }
+
     }
     
-    public String generarNuevoID(){
-//        int numero = listaClientes.size() +1;
-//        return String.format("CLI%03d", numero);
-        int mayor = 0;
-        
-        for (D_clientees cliente : listaClientes) {
-            String id = cliente.getIDcliente();
-            if (id.startsWith("CLI")) {
-                try {
-                    int numero = Integer.parseInt(id.substring(3));
-                    if (numero>mayor) {
-                        mayor = numero;                        
-                    }
-                } catch (Exception e) {
+   private void buscarClientePorDni() {
+
+    String dni = txtBuscarCliente.getText().trim();
+
+    // Si no escribió un DNI, mostramos todos los clientes.
+    if (dni.isEmpty() || dni.equals("Ingrese DNI...")) {
+        cargarClientes();
+        return;
+    }
+
+    if (!dni.matches("[0-9]{8}")) {
+        JOptionPane.showMessageDialog(
+                this,
+                "Ingrese un DNI de 8 dígitos.",
+                "DNI inválido",
+                JOptionPane.WARNING_MESSAGE
+        );
+        return;
+    }
+
+    String sql = "SELECT id_cliente, dni, nombre, telefono "
+            + "FROM cliente WHERE dni = ?";
+
+    try (Connection con = conexionLiv.conectar()) {
+
+        if (con == null) {
+            JOptionPane.showMessageDialog( this,"No se pudo conectar con la base de datos.");
+            return;
+        }
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, dni);
+
+            try (ResultSet rs = ps.executeQuery()) {
+
+                DefaultTableModel modelo =
+                        (DefaultTableModel) tblClientes.getModel();
+
+                modelo.setRowCount(0);
+
+                while (rs.next()) {
+                    modelo.addRow(new Object[]{
+                        rs.getInt("id_cliente"),
+                        rs.getString("dni"),
+                        rs.getString("nombre"),
+                        rs.getString("telefono")
+                    });
+                }
+
+                lblTotalClientes.setText(
+                        "Clientes encontrados: " + modelo.getRowCount()
+                );
+
+                if (modelo.getRowCount() == 0) {
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "No se encontró un cliente con ese DNI."
+                    );
                 }
             }
-            
         }
-        
-        return String.format("CLI%03d", mayor+1);
-    }
-    
-    public void agregarCliente(D_clientees cliente){
-        listaClientes.add(cliente);
-        cargarTabla();
-    }
-    
-    public D_clientees buscarClientePorDocumento(String documento){
-        
-        for (D_clientees cliente : listaClientes) {
-            if (cliente.getNumeroDocumento().equals(documento)) {
-                return cliente;
-            }
-            
-        }
-        return null;
-    }
-    
-   
 
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog( this,"Error al buscar cliente: " + e.getMessage()
+        );
+    }
+}
+    
     public void EncabezadoTabla() {
         tblClientes.getTableHeader().setFont( new Font("Segoe UI", Font.BOLD, 13) );
         tblClientes.getTableHeader().setBackground( new Color(246, 231, 223) );
         tblClientes.getTableHeader().setForeground( new Color(58, 42, 38) );
 
         tblClientes.getColumnModel().getColumn(0).setPreferredWidth(100);
-         tblClientes.getColumnModel().getColumn(1).setPreferredWidth(130);
-        tblClientes.getColumnModel().getColumn(2).setPreferredWidth(180);
-        tblClientes.getColumnModel().getColumn(3).setPreferredWidth(390);
-        tblClientes.getColumnModel().getColumn(4).setPreferredWidth(180);
+         tblClientes.getColumnModel().getColumn(1).setPreferredWidth(150);
+        tblClientes.getColumnModel().getColumn(2).setPreferredWidth(300);
+        tblClientes.getColumnModel().getColumn(3).setPreferredWidth(180);
         tblClientes.getTableHeader().setReorderingAllowed(false); // no editar
     }
-
+    
     public void FechaHora() {
         javax.swing.Timer timer = new javax.swing.Timer(1000, e -> {
             java.time.LocalDate fecha = java.time.LocalDate.now();
@@ -124,12 +157,74 @@ public class D_Clientes extends javax.swing.JFrame {
         timer.start();
 
     }
+      
+    private  D_clientees obtenerClienteSeleccionado(){
+        int fila = tblClientes.getSelectedRow();
+        
+        if (fila == -1) {
+            JOptionPane.showMessageDialog( this,"Seleccione una tabla ");
+            return null;
+        }
+        // obtiene la fila correcta incluso si la tabla esta ordenada
+        int filaModelo = tblClientes.convertRowIndexToModel(fila);
+        DefaultTableModel modelo = (DefaultTableModel) tblClientes.getModel();
+        
+        int id = Integer.parseInt(modelo.getValueAt(filaModelo, 0).toString()); 
+        String dni = java.util.Objects.toString(modelo.getValueAt(filaModelo, 1) ,"");
+        String nombre = java.util.Objects.toString(modelo.getValueAt(filaModelo, 2) ,"");
+        String telefono = java.util.Objects.toString(modelo.getValueAt(filaModelo, 3) ,"");
+        
+        return new D_clientees(id, dni, nombre, telefono);
+    }
+    
+    private  void eliminarClientes(){
+        D_clientees cliente = obtenerClienteSeleccionado();
+        if(cliente==null){
+            return;
+        }
+        int respuesta = JOptionPane.showConfirmDialog(this, "¿Desea eliminar a este cliente?\n\n"
+            + "Nombre: " + cliente.getNombre() + "\n"
+            + "DNI: " + cliente.getDni(),
+            "Confirmar eliminación",JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
+        if (respuesta!=JOptionPane.YES_OPTION) {
+            return;
+        }
+        String sql = "DELETE FROM cliente WHERE id_cliente = ? ";
+        
+        try (Connection con = conexionLiv.conectar()){
+            if (con == null) {
+              JOptionPane.showMessageDialog(  this, "No se pudo conectar con la base de datos." );
+            return;
+            }
+            try(PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setInt(1, cliente.getIDcliente());
+                int filas = ps.executeUpdate();
+                if (filas>0) {
+                   JOptionPane.showMessageDialog(this, "Cliente eliminado correctamente."); 
+                }else{
+                   JOptionPane.showMessageDialog(this, "Cliente ya no existe en la base de datos."); 
+                }
+                actualizarClientes();
+            }
+            
+        } catch (Exception e) {
+             JOptionPane.showMessageDialog( this,"Error al eliminar cliente: " + e.getMessage());
+        }
+    }
+    
+    private void actualizarClientes() {
+
+        txtBuscarCliente.setText("");
+        txtBuscarCliente.setForeground(new java.awt.Color(58, 42, 38));
+
+        cargarClientes();
+    }
+    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel3 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -140,7 +235,7 @@ public class D_Clientes extends javax.swing.JFrame {
         btnEliminar = new javax.swing.JButton();
         btnActualizar = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
-        btnRegistrarCliente1 = new javax.swing.JButton();
+        btnsalir = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         lblTotalClientes = new javax.swing.JLabel();
         lblfecha = new javax.swing.JLabel();
@@ -151,15 +246,9 @@ public class D_Clientes extends javax.swing.JFrame {
         btnBuscarCliente = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
 
-        jPanel3.setBackground(new java.awt.Color(255, 252, 250));
-        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setUndecorated(true);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        setPreferredSize(new java.awt.Dimension(800, 700));
 
         jPanel1.setBackground(new java.awt.Color(255, 252, 250));
-        jPanel1.setMinimumSize(new java.awt.Dimension(800, 700));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel2.setBackground(new java.awt.Color(255, 252, 250));
@@ -253,27 +342,27 @@ public class D_Clientes extends javax.swing.JFrame {
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenClientes/iconoCliente68.png"))); // NOI18N
         jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, 70));
 
-        btnRegistrarCliente1.setBackground(new java.awt.Color(216, 154, 132));
-        btnRegistrarCliente1.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
-        btnRegistrarCliente1.setForeground(new java.awt.Color(255, 255, 255));
-        btnRegistrarCliente1.setText("X");
-        btnRegistrarCliente1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(216, 154, 132), 1, true));
-        btnRegistrarCliente1.setFocusPainted(false);
-        btnRegistrarCliente1.setOpaque(true);
-        btnRegistrarCliente1.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnsalir.setBackground(new java.awt.Color(216, 154, 132));
+        btnsalir.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
+        btnsalir.setForeground(new java.awt.Color(255, 255, 255));
+        btnsalir.setText("X");
+        btnsalir.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(216, 154, 132), 1, true));
+        btnsalir.setFocusPainted(false);
+        btnsalir.setOpaque(true);
+        btnsalir.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btnRegistrarCliente1MouseEntered(evt);
+                btnsalirMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnRegistrarCliente1MouseExited(evt);
+                btnsalirMouseExited(evt);
             }
         });
-        btnRegistrarCliente1.addActionListener(new java.awt.event.ActionListener() {
+        btnsalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRegistrarCliente1ActionPerformed(evt);
+                btnsalirActionPerformed(evt);
             }
         });
-        jPanel2.add(btnRegistrarCliente1, new org.netbeans.lib.awtextra.AbsoluteConstraints(765, 0, 40, 34));
+        jPanel2.add(btnsalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(765, 0, 40, 34));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 800, 150));
 
@@ -307,33 +396,33 @@ public class D_Clientes extends javax.swing.JFrame {
         tblClientes.setForeground(new java.awt.Color(58, 42, 38));
         tblClientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "ID", "TIPO DOC.", "DNI /RUC", "NOMBRE", "TELEFONO"
+                "ID", "DNI ", "NOMBRE", "TELEFONO"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, true, false, false, false
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -352,7 +441,7 @@ public class D_Clientes extends javax.swing.JFrame {
 
         txtBuscarCliente.setForeground(new java.awt.Color(169, 154, 148));
         txtBuscarCliente.setHorizontalAlignment(javax.swing.JTextField.LEFT);
-        txtBuscarCliente.setText(" Ingrese DNI o RUC...");
+        txtBuscarCliente.setText(" Ingrese DNI...");
         txtBuscarCliente.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(232, 216, 208)));
         txtBuscarCliente.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -390,24 +479,27 @@ public class D_Clientes extends javax.swing.JFrame {
         jLabel3.setText("Buscar por DNI o RUC:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 170, 180, 40));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
-
-        pack();
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 800, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 700, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
     }// </editor-fold>//GEN-END:initComponents
-
-    private void txtBuscarClienteFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBuscarClienteFocusGained
-        if (txtBuscarCliente.getText().equals(" Ingrese DNI o RUC...")) {
-            txtBuscarCliente.setText("");
-            txtBuscarCliente.setForeground(new Color(58, 42, 38));
-        }
-    }//GEN-LAST:event_txtBuscarClienteFocusGained
-
-    private void txtBuscarClienteFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBuscarClienteFocusLost
-        if (txtBuscarCliente.getText().trim().isEmpty()) {
-            txtBuscarCliente.setText(" Ingrese DNI o RUC...");
-            txtBuscarCliente.setForeground(new Color(168,154,148));
-        }
-    }//GEN-LAST:event_txtBuscarClienteFocusLost
 
     private void btnRegistrarClienteMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegistrarClienteMouseEntered
         btnRegistrarCliente.setBackground(new Color(199, 132, 108));
@@ -417,127 +509,64 @@ public class D_Clientes extends javax.swing.JFrame {
         btnRegistrarCliente.setBackground(new Color(216, 154, 132));
     }//GEN-LAST:event_btnRegistrarClienteMouseExited
 
-    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-        txtBuscarCliente.setText(" Ingrese DNI o RUC...");
-        txtBuscarCliente.setForeground(
-            new Color(169, 154, 148)
-    );
-        cargarTabla();
-        tblClientes.clearSelection();
-    }//GEN-LAST:event_btnActualizarActionPerformed
-
-    private void btnRegistrarCliente1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegistrarCliente1MouseEntered
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnRegistrarCliente1MouseEntered
-
-    private void btnRegistrarCliente1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegistrarCliente1MouseExited
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnRegistrarCliente1MouseExited
-
-    private void btnRegistrarCliente1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarCliente1ActionPerformed
-        System.exit(0);
-    }//GEN-LAST:event_btnRegistrarCliente1ActionPerformed
-
-    private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
-        String documento = txtBuscarCliente.getText().trim();
-        
-        if (documento.isEmpty() || documento.equals(" Ingrese DNI o RUC...")) {
-            cargarTabla();
-            return;
-        }
-        DefaultTableModel modelo = (DefaultTableModel) tblClientes.getModel();
-        modelo.setRowCount(0);
-        
-        D_clientees clienteEncontrado = buscarClientePorDocumento(documento);
-        
-      
-            
-            if (clienteEncontrado != null) {
-                Object[] fila = {
-                clienteEncontrado.getIDcliente(),
-                clienteEncontrado.getTipoDocumento(),
-                clienteEncontrado.getNumeroDocumento(),
-                clienteEncontrado.getNombre(),
-                clienteEncontrado.getTelefono()
-            };
-                modelo.addRow(fila);
-                
-                
-            }else{
-                JOptionPane.showMessageDialog(this, "No se encontró ningún cliente con ese documento.",
-                "Cliente no encontrado",
-                JOptionPane.INFORMATION_MESSAGE);
-                cargarTabla();
-            }
-            
-            
-            
-        
-    }//GEN-LAST:event_btnBuscarClienteActionPerformed
-
     private void btnRegistrarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarClienteActionPerformed
-        D_FromCliente formulario = new D_FromCliente(this, null);
+        D_FromCliente formulario = new D_FromCliente(this);
         formulario.setVisible(true);
     }//GEN-LAST:event_btnRegistrarClienteActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        int filaSeleccionada = tblClientes.getSelectedRow();
+        D_clientees cliente = obtenerClienteSeleccionado();
         
-        if (filaSeleccionada == -1) {
-           JOptionPane.showMessageDialog( this,  "Seleccione un cliente de la tabla.", "Editar cliente", JOptionPane.WARNING_MESSAGE );
-          return; 
+        if (cliente==null) {
+            return;
         }
-        
-        String documento = tblClientes.getValueAt(filaSeleccionada, 2).toString();
-        D_clientees cliente = buscarClientePorDocumento(documento);
-        
-        if (cliente != null) {
-            D_FromCliente formulario = new D_FromCliente(this, cliente);
-            formulario.setLocationRelativeTo(this);
-            formulario.setVisible(true);
-        }
+        D_FromCliente formularios = new D_FromCliente(this, cliente);
+        formularios.setVisible(true);
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        int filaSeleccionada = tblClientes.getSelectedRow();
-        
-        if (filaSeleccionada == -1) {
-            JOptionPane.showMessageDialog( this,  "Seleccione un cliente de la tabla.", "Eliminar cliente", JOptionPane.WARNING_MESSAGE );
-          return; 
-        }
-        
-        String documento = tblClientes.getValueAt(filaSeleccionada, 2).toString();
-        String nombre = tblClientes.getValueAt(filaSeleccionada, 3).toString();
-        int respuesta = JOptionPane.showConfirmDialog(this, "¿Desea eliminar al cliente " + nombre + "?","Confirmar eliminación",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
-        
-        if (respuesta == JOptionPane.YES_OPTION) {
-            listaClientes.removeIf(cliente -> cliente.getNumeroDocumento().equals(documento));
-            cargarTabla();
-            JOptionPane.showMessageDialog(
-                this,
-                "Cliente eliminado correctamente.",
-                "Eliminar cliente",
-                JOptionPane.INFORMATION_MESSAGE
-        );
-        }
+      eliminarClientes();
     }//GEN-LAST:event_btnEliminarActionPerformed
 
+    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+      actualizarClientes();
+    }//GEN-LAST:event_btnActualizarActionPerformed
+
+    private void btnsalirMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnsalirMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnsalirMouseEntered
+
+    private void btnsalirMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnsalirMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnsalirMouseExited
+
+    private void btnsalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsalirActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_btnsalirActionPerformed
+
+    private void txtBuscarClienteFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBuscarClienteFocusGained
+        if (txtBuscarCliente.getText().equals(" Ingrese DNI...")) {
+            txtBuscarCliente.setText("");
+        }
+         txtBuscarCliente.setForeground(new Color(58, 42, 38));
+    }//GEN-LAST:event_txtBuscarClienteFocusGained
+
+    private void txtBuscarClienteFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBuscarClienteFocusLost
+        if (txtBuscarCliente.getText().trim().isEmpty()) {
+            txtBuscarCliente.setText(" Ingrese DNI...");
+        }
+        txtBuscarCliente.setForeground(new Color(168,154,148));
+    }//GEN-LAST:event_txtBuscarClienteFocusLost
+
     private void txtBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarClienteActionPerformed
-       
+
     }//GEN-LAST:event_txtBuscarClienteActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-       
-          
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new D_Clientes().setVisible(true);
-            }
-        });
-    }
+    private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
+       buscarClientePorDni();
+
+    }//GEN-LAST:event_btnBuscarClienteActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
@@ -545,7 +574,7 @@ public class D_Clientes extends javax.swing.JFrame {
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnRegistrarCliente;
-    private javax.swing.JButton btnRegistrarCliente1;
+    private javax.swing.JButton btnsalir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -553,7 +582,6 @@ public class D_Clientes extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblTotalClientes;
