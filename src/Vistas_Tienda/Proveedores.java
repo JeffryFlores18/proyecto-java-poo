@@ -41,31 +41,31 @@ public class Proveedores extends javax.swing.JPanel {
 
         jLabel1.setFont(new java.awt.Font("Maiandra GD", 1, 36)); // NOI18N
         jLabel1.setText("PROVEEDORES");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(62, 22, -1, 29));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 20, -1, 29));
 
         btnAgregarProveedor.setBackground(new java.awt.Color(202, 125, 117));
         btnAgregarProveedor.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnAgregarProveedor.setText("AGREGAR PROVEEDOR");
         btnAgregarProveedor.addActionListener(this::btnAgregarProveedorActionPerformed);
-        jPanel1.add(btnAgregarProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 90, -1, 48));
+        jPanel1.add(btnAgregarProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 90, -1, 48));
 
         btnBuscar.setBackground(new java.awt.Color(202, 125, 117));
         btnBuscar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnBuscar.setText("BUSCAR POR RUC");
         btnBuscar.addActionListener(this::btnBuscarActionPerformed);
-        jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 90, 145, 48));
+        jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 90, 145, 48));
 
         btnEditar.setBackground(new java.awt.Color(202, 125, 117));
         btnEditar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnEditar.setText("EDITAR");
         btnEditar.addActionListener(this::btnEditarActionPerformed);
-        jPanel1.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 90, 120, 48));
+        jPanel1.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 90, 120, 48));
 
         btnEliminar.setBackground(new java.awt.Color(202, 125, 117));
         btnEliminar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnEliminar.setText("ELIMINAR");
         btnEliminar.addActionListener(this::btnEliminarActionPerformed);
-        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 90, 120, 48));
+        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 90, 120, 48));
 
         jScrollPane1.setPreferredSize(new java.awt.Dimension(700, 600));
 
@@ -83,7 +83,7 @@ public class Proveedores extends javax.swing.JPanel {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 170, 600, 335));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(74, 170, 640, 390));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -91,13 +91,13 @@ public class Proveedores extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 694, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 794, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 588, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 688, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
