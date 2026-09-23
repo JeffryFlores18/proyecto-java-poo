@@ -84,14 +84,15 @@ public class Proveedores extends javax.swing.JPanel {
         btnEliminar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaProveedores = new javax.swing.JTable();
+        jLabel2 = new javax.swing.JLabel();
 
         jPanel1.setBackground(new java.awt.Color(255, 247, 244));
         jPanel1.setPreferredSize(new java.awt.Dimension(700, 600));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Maiandra GD", 1, 36)); // NOI18N
-        jLabel1.setText("PROVEEDORES");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 20, -1, 29));
+        jLabel1.setIcon(new javax.swing.ImageIcon("D:\\Users\\Usuario\\Documents\\NetBeansProjects\\POO-2026-I\\proyecto-java-poo\\src\\ImagenProveedor\\proveedor\\Alana_Store_logo_100x100_transparente.png")); // NOI18N
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 0, 110, 70));
 
         btnAgregarProveedor.setBackground(new java.awt.Color(202, 125, 117));
         btnAgregarProveedor.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -142,6 +143,10 @@ public class Proveedores extends javax.swing.JPanel {
         jScrollPane1.setViewportView(tablaProveedores);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, 680, 380));
+
+        jLabel2.setFont(new java.awt.Font("Maiandra GD", 1, 36)); // NOI18N
+        jLabel2.setText("PROVEEDORES");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 20, -1, 29));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -195,13 +200,51 @@ public class Proveedores extends javax.swing.JPanel {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        javax.swing.JFrame ventana = new javax.swing.JFrame("Editar Proveedor");
+        int fila = tablaProveedores.getSelectedRow();
 
-        ventana.setContentPane(new ProveedorEditar());
+        if (fila == -1) {
+
+            javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "Seleccione un proveedor de la tabla."
+            );
+
+            return;
+        }
+
+        String id = tablaProveedores.getValueAt(fila, 0).toString();
+        String ruc = tablaProveedores.getValueAt(fila, 1).toString();
+        String nombre = tablaProveedores.getValueAt(fila, 2).toString();
+        String telefono = tablaProveedores.getValueAt(fila, 3).toString();
+        String direccion = tablaProveedores.getValueAt(fila, 4).toString();
+        String email = tablaProveedores.getValueAt(fila, 5).toString();
+
+        javax.swing.JFrame ventana
+                = new javax.swing.JFrame("Editar Proveedor");
+
+        ventana.setContentPane(
+                new ProveedorEditar(
+                        id,
+                        ruc,
+                        nombre,
+                        telefono,
+                        direccion,
+                        email
+                )
+        );
 
         ventana.setSize(800, 700);
 
         ventana.setLocationRelativeTo(null);
+
+        ventana.addWindowListener(new java.awt.event.WindowAdapter() {
+
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+
+                cargarProveedores();
+            }
+        });
 
         ventana.setVisible(true);
     }//GEN-LAST:event_btnEditarActionPerformed
@@ -261,6 +304,7 @@ public class Proveedores extends javax.swing.JPanel {
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tablaProveedores;
