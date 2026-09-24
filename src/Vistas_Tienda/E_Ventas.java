@@ -1,5 +1,15 @@
 package Vistas_Tienda;
 
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.PreparedStatement;
+import javax.swing.JOptionPane;
+import java.awt.Color;
+import java.util.Date;
+import javax.swing.JOptionPane;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.table.DefaultTableModel;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
@@ -15,9 +25,87 @@ public class E_Ventas extends javax.swing.JPanel {
      * Creates new form B_Resumen
      */
     public E_Ventas() {
-        initComponents();
+        if (cboHistorial.getItemCount() == 0) {
+        cboHistorial.addItem("Todos los registros");
+        cboHistorial.addItem("Ventas de hoy");
+        cboHistorial.addItem("Esta semana");
+        cboHistorial.addItem("Este mes");
     }
+    
+    // Cargar el historial al iniciar
+    cargarHistorialVentas();
+    }
+public void cargarHistorialVentas() {
+    DefaultTableModel modelo = (DefaultTableModel) tableHistorialVentas.getModel();
+    modelo.setRowCount(0); // Limpiar tabla
 
+    String sql = "SELECT v.id_venta, v.id_cliente, SUM(d.cantidad) AS n_productos, v.fecha, v.hora, v.total " +
+                 "FROM venta v " +
+                 "LEFT JOIN detalle_venta d ON v.id_venta = d.id_venta " +
+                 "GROUP BY v.id_venta, v.id_cliente, v.fecha, v.hora, v.total " +
+                 "ORDER BY v.fecha DESC, v.hora DESC";
+
+    try {
+        Connection con = (Connection) conexionLiv.conectar();
+        PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            Object[] fila = {
+                rs.getInt("id_venta"),
+                rs.getInt("id_cliente"),
+                rs.getInt("n_productos"),
+                rs.getDate("fecha"),
+                rs.getTime("hora"),
+                String.format("S/ %.2f", rs.getDouble("total"))
+            };
+            modelo.addRow(fila);
+        }
+
+        rs.close();
+        ps.close();
+        con.close();
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error al cargar historial de ventas: " + e.getMessage());
+    }
+}
+public void cargarProductosVendidos(int idVenta) {
+    DefaultTableModel modelo = (DefaultTableModel) tableProductosVendidos.getModel();
+    modelo.setRowCount(0); // Limpiar tabla inferior
+
+    String sql = "SELECT p.id_producto, p.tipo_prenda, p.descripcion, d.cantidad, d.precio_unitario, d.subtotal " +
+                 "FROM detalle_venta d " +
+                 "INNER JOIN producto p ON d.id_producto = p.id_producto " +
+                 "WHERE d.id_venta = ?";
+
+    try {
+        Connection con = (Connection) conexionLiv.conectar();
+        PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
+        ps.setInt(1, idVenta);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            Object[] fila = {
+                rs.getInt("id_producto"),
+                rs.getString("tipo_prenda"), // PRODUCTO
+                rs.getString("tipo_prenda"), // TIPO
+                rs.getString("descripcion"), // DESCRIPCION
+                rs.getInt("cantidad"),       // CANTIDAD VENDIDA
+                String.format("S/ %.2f", rs.getDouble("precio_unitario")), // PRECIO
+                String.format("S/ %.2f", rs.getDouble("subtotal"))         // RECAUDO
+            };
+            modelo.addRow(fila);
+        }
+
+        rs.close();
+        ps.close();
+        con.close();
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error al cargar detalles de la venta: " + e.getMessage());
+    }
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -77,8 +165,10 @@ public class E_Ventas extends javax.swing.JPanel {
         jScrollPane2.setViewportView(tableProductosVendidos);
 
         btnVerDetallesVenta.setText("VER DETALLES");
+        btnVerDetallesVenta.addActionListener(this::btnVerDetallesVentaActionPerformed);
 
         btnActualizarIngresos.setText("INGRESOS");
+        btnActualizarIngresos.addActionListener(this::btnActualizarIngresosActionPerformed);
 
         javax.swing.GroupLayout txtIngresosVentasLayout = new javax.swing.GroupLayout(txtIngresosVentas);
         txtIngresosVentas.setLayout(txtIngresosVentasLayout);
@@ -146,6 +236,76 @@ public class E_Ventas extends javax.swing.JPanel {
             .addComponent(txtIngresosVentas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnVerDetallesVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerDetallesVentaActionPerformed
+// 1. Verificamos si el usuario seleccionó una fila en la tabla superior
+    int filaSeleccionada = tableHistorialVentas.getSelectedRow();
+    
+    if (filaSeleccionada == -1) {
+        javax.swing.JOptionPane.showMessageDialog(this, 
+            "Por favor, seleccione una venta del historial superior para ver sus detalles.", 
+            "Aviso", 
+            javax.swing.JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+    
+    // 2. Extraemos el ID_VENTA de la primera columna (columna 0)
+    int idVenta = Integer.parseInt(tableHistorialVentas.getValueAt(filaSeleccionada, 0).toString());
+    
+    // 3. Consultamos la base de datos para llenar la tabla inferior
+    javax.swing.table.DefaultTableModel modeloDetalle = (javax.swing.table.DefaultTableModel) tableProductosVendidos.getModel();
+    modeloDetalle.setRowCount(0); // Limpiamos la tabla de abajo
+
+    String sql = "SELECT p.id_producto, p.tipo_prenda, p.descripcion, d.cantidad, d.precio_unitario, d.subtotal " +
+                 "FROM detalle_venta d " +
+                 "INNER JOIN producto p ON d.id_producto = p.id_producto " +
+                 "WHERE d.id_venta = ?";
+
+    try {
+        java.sql.Connection con = conexionLiv.conectar();
+        java.sql.PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, idVenta);
+        java.sql.ResultSet rs = ps.executeQuery();
+
+        boolean hayProductos = false;
+        while (rs.next()) {
+            hayProductos = true;
+            Object[] fila = {
+                rs.getInt("id_producto"),
+                rs.getString("tipo_prenda"), // PRODUCTO
+                rs.getString("tipo_prenda"), // TIPO
+                rs.getString("descripcion"), // DESCRIPCION
+                rs.getInt("cantidad"),       // CANTIDAD VENDIDA
+                String.format("S/ %.2f", rs.getDouble("precio_unitario")), // PRECIO
+                String.format("S/ %.2f", rs.getDouble("subtotal"))         // RECAUDO
+            };
+            modeloDetalle.addRow(fila);
+        }
+
+        if (!hayProductos) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Esta venta no registra productos asociados.", "Información", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        }
+
+        rs.close();
+        ps.close();
+        con.close();
+
+    } catch (Exception e) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Error al cargar los detalles: " + e.getMessage(), "Error BD", javax.swing.JOptionPane.ERROR_MESSAGE);
+    }
+    }//GEN-LAST:event_btnVerDetallesVentaActionPerformed
+
+    private void btnActualizarIngresosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarIngresosActionPerformed
+            // TODO add your handling code here:
+            cargarHistorialVentas();
+    
+    // Limpiar la tabla de abajo al actualizar
+    DefaultTableModel modeloDetalle = (DefaultTableModel) tableProductosVendidos.getModel();
+    modeloDetalle.setRowCount(0);
+    
+    JOptionPane.showMessageDialog(this, "Historial de ventas actualizado correctamente.");
+    
+    }//GEN-LAST:event_btnActualizarIngresosActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

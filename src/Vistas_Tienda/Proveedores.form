@@ -68,9 +68,6 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="12" style="1"/>
             </Property>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="D:\Users\Usuario\Documents\NetBeansProjects\POO-2026-I\proyecto-java-poo\src\ImagenProveedor\proveedor\agregar.png"/>
-            </Property>
             <Property name="text" type="java.lang.String" value="AGREGAR PROVEEDOR"/>
             <Property name="focusPainted" type="boolean" value="false"/>
           </Properties>
@@ -90,9 +87,6 @@
             </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="12" style="1"/>
-            </Property>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="D:\Users\Usuario\Documents\NetBeansProjects\POO-2026-I\proyecto-java-poo\src\ImagenProveedor\proveedor\buscar.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="BUSCAR POR RUC"/>
             <Property name="focusPainted" type="boolean" value="false"/>
@@ -114,9 +108,6 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="12" style="1"/>
             </Property>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="D:\Users\Usuario\Documents\NetBeansProjects\POO-2026-I\proyecto-java-poo\src\ImagenProveedor\proveedor\icono_editar_negro_32x32.png"/>
-            </Property>
             <Property name="text" type="java.lang.String" value="EDITAR"/>
             <Property name="focusPainted" type="boolean" value="false"/>
           </Properties>
@@ -136,9 +127,6 @@
             </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="12" style="1"/>
-            </Property>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="D:\Users\Usuario\Documents\NetBeansProjects\POO-2026-I\proyecto-java-poo\src\ImagenProveedor\proveedor\eliminar.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="ELIMINAR"/>
             <Property name="focusPainted" type="boolean" value="false"/>
