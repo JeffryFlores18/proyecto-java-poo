@@ -239,7 +239,7 @@ public void mostrarProductos(String buscarPor, String valorBusqueda) {
         btnActualizarStock.setBackground(new java.awt.Color(255, 243, 238));
         btnActualizarStock.setForeground(new java.awt.Color(184, 123, 103));
         btnActualizarStock.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenClientes/actualizar.png"))); // NOI18N
-        btnActualizarStock.setText("ACTUALIZAR STOCK");
+        btnActualizarStock.setText("ACTUALIZAR ");
         btnActualizarStock.addActionListener(this::btnActualizarStockActionPerformed);
 
         btnAgregarNuevoProducto.setBackground(new java.awt.Color(255, 243, 238));

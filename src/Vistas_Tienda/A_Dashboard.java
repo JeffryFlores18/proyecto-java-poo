@@ -51,28 +51,42 @@ public class A_Dashboard extends javax.swing.JFrame {
 
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setBackground(new java.awt.Color(255, 252, 250));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenClientes/Log.png"))); // NOI18N
 
+        btnResumen.setBackground(new java.awt.Color(255, 243, 238));
+        btnResumen.setForeground(new java.awt.Color(184, 123, 103));
         btnResumen.setText("RESUMEN");
         btnResumen.addActionListener(this::btnResumenActionPerformed);
 
+        btnProductos.setBackground(new java.awt.Color(255, 243, 238));
+        btnProductos.setForeground(new java.awt.Color(184, 123, 103));
         btnProductos.setText("PRODUCTOS");
         btnProductos.addActionListener(this::btnProductosActionPerformed);
 
+        btnClientes.setBackground(new java.awt.Color(255, 243, 238));
+        btnClientes.setForeground(new java.awt.Color(184, 123, 103));
         btnClientes.setText("CLIENTES");
         btnClientes.addActionListener(this::btnClientesActionPerformed);
 
+        btnProveedores.setBackground(new java.awt.Color(255, 243, 238));
+        btnProveedores.setForeground(new java.awt.Color(184, 123, 103));
         btnProveedores.setText("PROVEEDORES");
         btnProveedores.addActionListener(this::btnProveedoresActionPerformed);
 
+        btnVentas.setBackground(new java.awt.Color(255, 243, 238));
+        btnVentas.setForeground(new java.awt.Color(184, 123, 103));
         btnVentas.setText("VENTAS");
         btnVentas.addActionListener(this::btnVentasActionPerformed);
 
+        btnReportes.setBackground(new java.awt.Color(255, 243, 238));
+        btnReportes.setForeground(new java.awt.Color(184, 123, 103));
         btnReportes.setText("REPORTES");
         btnReportes.addActionListener(this::btnReportesActionPerformed);
 
+        btnSalir.setBackground(new java.awt.Color(255, 243, 238));
+        btnSalir.setForeground(new java.awt.Color(184, 123, 103));
         btnSalir.setText("SALIR");
         btnSalir.addActionListener(this::btnSalirActionPerformed);
 

@@ -42,7 +42,7 @@
         <Container class="javax.swing.JPanel" name="jPanel3">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+              <Color blue="fa" green="fc" red="ff" type="rgb"/>
             </Property>
           </Properties>
           <Constraints>
@@ -102,6 +102,12 @@
             </Component>
             <Component class="javax.swing.JButton" name="btnResumen">
               <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ee" green="f3" red="ff" type="rgb"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="67" green="7b" red="b8" type="rgb"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="RESUMEN"/>
               </Properties>
               <Events>
@@ -110,6 +116,12 @@
             </Component>
             <Component class="javax.swing.JButton" name="btnProductos">
               <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ee" green="f3" red="ff" type="rgb"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="67" green="7b" red="b8" type="rgb"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="PRODUCTOS"/>
               </Properties>
               <Events>
@@ -118,6 +130,12 @@
             </Component>
             <Component class="javax.swing.JButton" name="btnClientes">
               <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ee" green="f3" red="ff" type="rgb"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="67" green="7b" red="b8" type="rgb"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="CLIENTES"/>
               </Properties>
               <Events>
@@ -126,6 +144,12 @@
             </Component>
             <Component class="javax.swing.JButton" name="btnProveedores">
               <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ee" green="f3" red="ff" type="rgb"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="67" green="7b" red="b8" type="rgb"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="PROVEEDORES"/>
               </Properties>
               <Events>
@@ -134,6 +158,12 @@
             </Component>
             <Component class="javax.swing.JButton" name="btnVentas">
               <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ee" green="f3" red="ff" type="rgb"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="67" green="7b" red="b8" type="rgb"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="VENTAS"/>
               </Properties>
               <Events>
@@ -142,6 +172,12 @@
             </Component>
             <Component class="javax.swing.JButton" name="btnReportes">
               <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ee" green="f3" red="ff" type="rgb"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="67" green="7b" red="b8" type="rgb"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="REPORTES"/>
               </Properties>
               <Events>
@@ -150,6 +186,12 @@
             </Component>
             <Component class="javax.swing.JButton" name="btnSalir">
               <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ee" green="f3" red="ff" type="rgb"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="67" green="7b" red="b8" type="rgb"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="SALIR"/>
               </Properties>
               <Events>

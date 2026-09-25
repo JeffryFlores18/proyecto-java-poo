@@ -83,6 +83,7 @@ public class C_Productos_Nuevo_Producto extends javax.swing.JPanel {
 
         txtIdProducto.setForeground(new java.awt.Color(169, 154, 148));
         txtIdProducto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtIdProducto.setEnabled(false);
         panel2.add(txtIdProducto);
 
         jLabel3.setBackground(new java.awt.Color(255, 252, 250));
