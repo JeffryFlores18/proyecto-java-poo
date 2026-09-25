@@ -17,7 +17,7 @@ public class A_Dashboard extends javax.swing.JFrame {
         content.add(p,BorderLayout.CENTER);
         content.revalidate();
         content.repaint();
-    }
+    }   
     //hola hola 
     public A_Dashboard() {
         initComponents();

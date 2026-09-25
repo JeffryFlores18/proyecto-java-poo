@@ -31,7 +31,7 @@ public class Proveedores extends javax.swing.JPanel {
 
         try {
 
-            Connection conexion = ProveedoresConexion.conectar();
+            Connection conexion = conexionLiv.conectar();
 
             PreparedStatement sentencia = conexion.prepareStatement(sql);
 
@@ -275,7 +275,7 @@ public class Proveedores extends javax.swing.JPanel {
 
             try {
 
-                Connection conexion = ProveedoresConexion.conectar();
+                Connection conexion = conexionLiv.conectar();
                 PreparedStatement sentencia = conexion.prepareStatement(sql);
 
                 sentencia.setInt(1, id);
