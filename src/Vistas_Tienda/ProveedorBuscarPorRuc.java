@@ -114,7 +114,7 @@ public class ProveedorBuscarPorRuc extends javax.swing.JPanel {
 
         try {
 
-            Connection conexion = ProveedoresConexion.conectar();
+            Connection conexion = conexionLiv.conectar();
 
             PreparedStatement sentencia
                     = conexion.prepareStatement(sql);

@@ -13,6 +13,7 @@ public class ProveedorAgregar extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        txtNombre = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -23,7 +24,6 @@ public class ProveedorAgregar extends javax.swing.JPanel {
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         txtRuc = new javax.swing.JTextField();
-        txtNombre = new javax.swing.JTextField();
         txtTelefono = new javax.swing.JTextField();
         txtDireccion = new javax.swing.JTextField();
         txtEmail = new javax.swing.JTextField();
@@ -76,7 +76,6 @@ public class ProveedorAgregar extends javax.swing.JPanel {
         btnCancelar.addActionListener(this::btnCancelarActionPerformed);
         jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 490, 220, 70));
         jPanel1.add(txtRuc, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 100, 530, 40));
-        jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 170, 530, 40));
         jPanel1.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 240, 530, 40));
         jPanel1.add(txtDireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 310, 530, 40));
 
@@ -167,7 +166,7 @@ public class ProveedorAgregar extends javax.swing.JPanel {
 
         try {
 
-            Connection conexion = ProveedoresConexion.conectar();
+            Connection conexion = conexionLiv.conectar();
 
             PreparedStatement sentencia
                     = conexion.prepareStatement(sql);
