@@ -5,9 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.table.DefaultTableModel;
 
-public class Proveedores extends javax.swing.JPanel {
+public class F_Proveedores extends javax.swing.JPanel {
 
-    public Proveedores() {
+    public F_Proveedores() {
         initComponents();
         cargarProveedores();
     }
@@ -63,7 +63,7 @@ public class Proveedores extends javax.swing.JPanel {
 
         javax.swing.JFrame ventana = new javax.swing.JFrame("Proveedores");
 
-        ventana.setContentPane(new Proveedores());
+        ventana.setContentPane(new F_Proveedores());
 
         ventana.setSize(800, 700);
 
@@ -96,7 +96,7 @@ public class Proveedores extends javax.swing.JPanel {
 
         btnAgregarProveedor.setBackground(new java.awt.Color(202, 125, 117));
         btnAgregarProveedor.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnAgregarProveedor.setIcon(new javax.swing.ImageIcon("D:\\Users\\Usuario\\Documents\\NetBeansProjects\\POO-2026-I\\proyecto-java-poo\\src\\ImagenProveedor\\proveedor\\agregar.png")); // NOI18N
+        btnAgregarProveedor.setIcon(new javax.swing.ImageIcon("D:\\Users\\Usuario\\Documents\\JURADO NACIONAL DE ELECCIONES\\proyecto-java-poo-reparado\\proyecto-java-poo\\src\\ImagenProveedor\\proveedoragregar.png")); // NOI18N
         btnAgregarProveedor.setText("AGREGAR PROVEEDOR");
         btnAgregarProveedor.setFocusPainted(false);
         btnAgregarProveedor.addActionListener(this::btnAgregarProveedorActionPerformed);
@@ -104,7 +104,7 @@ public class Proveedores extends javax.swing.JPanel {
 
         btnBuscar.setBackground(new java.awt.Color(202, 125, 117));
         btnBuscar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnBuscar.setIcon(new javax.swing.ImageIcon("D:\\Users\\Usuario\\Documents\\NetBeansProjects\\POO-2026-I\\proyecto-java-poo\\src\\ImagenProveedor\\proveedor\\buscar.png")); // NOI18N
+        btnBuscar.setIcon(new javax.swing.ImageIcon("D:\\Users\\Usuario\\Documents\\JURADO NACIONAL DE ELECCIONES\\proyecto-java-poo-reparado\\proyecto-java-poo\\src\\ImagenProveedor\\proveedorbuscarruc.png")); // NOI18N
         btnBuscar.setText("BUSCAR POR RUC");
         btnBuscar.setFocusPainted(false);
         btnBuscar.addActionListener(this::btnBuscarActionPerformed);
@@ -112,7 +112,7 @@ public class Proveedores extends javax.swing.JPanel {
 
         btnEditar.setBackground(new java.awt.Color(202, 125, 117));
         btnEditar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnEditar.setIcon(new javax.swing.ImageIcon("D:\\Users\\Usuario\\Documents\\NetBeansProjects\\POO-2026-I\\proyecto-java-poo\\src\\ImagenProveedor\\proveedor\\icono_editar_negro_32x32.png")); // NOI18N
+        btnEditar.setIcon(new javax.swing.ImageIcon("D:\\Users\\Usuario\\Documents\\JURADO NACIONAL DE ELECCIONES\\proyecto-java-poo-reparado\\proyecto-java-poo\\src\\ImagenProveedor\\proveedoreditar.png")); // NOI18N
         btnEditar.setText("EDITAR");
         btnEditar.setFocusPainted(false);
         btnEditar.addActionListener(this::btnEditarActionPerformed);
@@ -120,7 +120,7 @@ public class Proveedores extends javax.swing.JPanel {
 
         btnEliminar.setBackground(new java.awt.Color(202, 125, 117));
         btnEliminar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnEliminar.setIcon(new javax.swing.ImageIcon("D:\\Users\\Usuario\\Documents\\NetBeansProjects\\POO-2026-I\\proyecto-java-poo\\src\\ImagenProveedor\\proveedor\\eliminar.png")); // NOI18N
+        btnEliminar.setIcon(new javax.swing.ImageIcon("D:\\Users\\Usuario\\Documents\\JURADO NACIONAL DE ELECCIONES\\proyecto-java-poo-reparado\\proyecto-java-poo\\src\\ImagenProveedor\\proveedor_eliminar.png")); // NOI18N
         btnEliminar.setText("ELIMINAR");
         btnEliminar.setFocusPainted(false);
         btnEliminar.addActionListener(this::btnEliminarActionPerformed);
@@ -169,7 +169,7 @@ public class Proveedores extends javax.swing.JPanel {
         javax.swing.JFrame ventana
                 = new javax.swing.JFrame("Agregar Proveedor");
 
-        ventana.setContentPane(new ProveedorAgregar());
+        ventana.setContentPane(new F_ProveedorAgregar());
 
         ventana.setSize(800, 700);
 
@@ -190,7 +190,7 @@ public class Proveedores extends javax.swing.JPanel {
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         javax.swing.JFrame ventana = new javax.swing.JFrame("Buscar Proveedor");
 
-        ventana.setContentPane(new ProveedorBuscarPorRuc());
+        ventana.setContentPane(new F_ProveedorBuscarPorRuc());
 
         ventana.setSize(800, 700);
 
@@ -223,7 +223,7 @@ public class Proveedores extends javax.swing.JPanel {
                 = new javax.swing.JFrame("Editar Proveedor");
 
         ventana.setContentPane(
-                new ProveedorEditar(
+                new F_ProveedorEditar(
                         id,
                         ruc,
                         nombre,
@@ -251,7 +251,6 @@ public class Proveedores extends javax.swing.JPanel {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         int fila = tablaProveedores.getSelectedRow();
-
         if (fila == -1) {
             javax.swing.JOptionPane.showMessageDialog(this,
                     "Seleccione un proveedor.");

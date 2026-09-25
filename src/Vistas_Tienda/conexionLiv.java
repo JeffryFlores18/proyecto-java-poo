@@ -12,7 +12,7 @@ public class conexionLiv {
     public static Connection conectar() {
         Connection con = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(url,user, pass);
 
             System.out.println("Conexion exitosa a ALANA STORE");

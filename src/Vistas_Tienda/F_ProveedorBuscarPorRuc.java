@@ -5,9 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.table.DefaultTableModel;
 
-public class ProveedorBuscarPorRuc extends javax.swing.JPanel {
+public class F_ProveedorBuscarPorRuc extends javax.swing.JPanel {
 
-    public ProveedorBuscarPorRuc() {
+    public F_ProveedorBuscarPorRuc() {
         initComponents();
     }
 
@@ -114,7 +114,7 @@ public class ProveedorBuscarPorRuc extends javax.swing.JPanel {
 
         try {
 
-            Connection conexion = ProveedoresConexion.conectar();
+            Connection conexion = conexionLiv.conectar();
 
             PreparedStatement sentencia
                     = conexion.prepareStatement(sql);

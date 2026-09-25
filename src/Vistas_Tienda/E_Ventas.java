@@ -2,6 +2,13 @@ package Vistas_Tienda;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+
+import javax.swing.JOptionPane;
+import java.awt.Color;
+import java.util.Date;
+import javax.swing.JOptionPane;
+
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JDialog;
