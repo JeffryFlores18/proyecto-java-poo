@@ -3,9 +3,9 @@ package Vistas_Tienda;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
-public class ProveedorAgregar extends javax.swing.JPanel {
+public class F_ProveedorAgregar extends javax.swing.JPanel {
 
-    public ProveedorAgregar() {
+    public F_ProveedorAgregar() {
         initComponents();
     }
 

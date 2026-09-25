@@ -5,9 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.table.DefaultTableModel;
 
-public class Proveedores extends javax.swing.JPanel {
+public class F_Proveedores extends javax.swing.JPanel {
 
-    public Proveedores() {
+    public F_Proveedores() {
         initComponents();
         cargarProveedores();
     }
@@ -63,7 +63,7 @@ public class Proveedores extends javax.swing.JPanel {
 
         javax.swing.JFrame ventana = new javax.swing.JFrame("Proveedores");
 
-        ventana.setContentPane(new Proveedores());
+        ventana.setContentPane(new F_Proveedores());
 
         ventana.setSize(800, 700);
 
@@ -169,7 +169,7 @@ public class Proveedores extends javax.swing.JPanel {
         javax.swing.JFrame ventana
                 = new javax.swing.JFrame("Agregar Proveedor");
 
-        ventana.setContentPane(new ProveedorAgregar());
+        ventana.setContentPane(new F_ProveedorAgregar());
 
         ventana.setSize(800, 700);
 
@@ -190,7 +190,7 @@ public class Proveedores extends javax.swing.JPanel {
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         javax.swing.JFrame ventana = new javax.swing.JFrame("Buscar Proveedor");
 
-        ventana.setContentPane(new ProveedorBuscarPorRuc());
+        ventana.setContentPane(new F_ProveedorBuscarPorRuc());
 
         ventana.setSize(800, 700);
 
@@ -223,7 +223,7 @@ public class Proveedores extends javax.swing.JPanel {
                 = new javax.swing.JFrame("Editar Proveedor");
 
         ventana.setContentPane(
-                new ProveedorEditar(
+                new F_ProveedorEditar(
                         id,
                         ruc,
                         nombre,

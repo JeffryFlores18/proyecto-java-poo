@@ -4,7 +4,7 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 
 public class A_Dashboard extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(A_Dashboard.class.getName());
 
         public static boolean logeado = false;
@@ -175,7 +175,7 @@ public class A_Dashboard extends javax.swing.JFrame {
     private void btnProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProveedoresActionPerformed
         // TODO add your handling code here:
         
-        ProveedorEditar p = new ProveedorEditar();
+        F_Proveedores p = new F_Proveedores();
         mostrarPanel(p);
     }//GEN-LAST:event_btnProveedoresActionPerformed
 

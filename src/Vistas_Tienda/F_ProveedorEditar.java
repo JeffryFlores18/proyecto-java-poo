@@ -3,13 +3,13 @@ package Vistas_Tienda;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
-public class ProveedorEditar extends javax.swing.JPanel {
+public class F_ProveedorEditar extends javax.swing.JPanel {
 
-    public ProveedorEditar() {
+    public F_ProveedorEditar() {
         initComponents();
     }
 
-    public ProveedorEditar(String id, String ruc, String nombre,
+    public F_ProveedorEditar(String id, String ruc, String nombre,
             String telefono, String direccion, String email) {
 
         initComponents();
