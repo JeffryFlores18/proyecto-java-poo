@@ -125,7 +125,7 @@ public class AA_Login extends javax.swing.JFrame {
     private void btnEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrarActionPerformed
  String user = txtUser.getText();
     String pass = new String(txtPassword.getPassword());
-        if ("admin".equals(user) && "123".equals(pass)) {
+        if ("LuchoPapucho@gmail.com".equals(user) && "12345".equals(pass)) {
         A_Dashboard dashboard = new A_Dashboard();
         dashboard.setVisible(true);
         this.dispose(); 

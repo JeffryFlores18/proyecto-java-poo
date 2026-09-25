@@ -515,12 +515,13 @@ public class D_Clientesp extends javax.swing.JPanel {
     }//GEN-LAST:event_btnRegistrarClienteActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        D_clientees cliente = obtenerClienteSeleccionado();
+        String titulo = "Editar";
+            D_clientees cliente = obtenerClienteSeleccionado();
         
         if (cliente==null) {
             return;
         }
-        D_FromCliente formularios = new D_FromCliente(this, cliente);
+        D_FromCliente formularios = new D_FromCliente(this, cliente,titulo);
         formularios.setVisible(true);
     }//GEN-LAST:event_btnEditarActionPerformed
 

@@ -32,14 +32,16 @@ public class D_FromCliente extends javax.swing.JFrame {
         setLocationRelativeTo(ventanaClientes);
     }
 
-    public D_FromCliente(D_Clientesp ventanaClientes, D_clientees cliente) {
+    public D_FromCliente(D_Clientesp ventanaClientes, D_clientees cliente,String titulo) {
         this(ventanaClientes);
         idclienteEditar = cliente.getIDcliente();
         txtidCliente.setText(String.valueOf(cliente.getIDcliente()));
         txtdni.setText(cliente.getDni());
         txtnombre.setText(cliente.getNombre());
         txttelefono.setText(cliente.getTelefono());
-      
+        if(titulo.equals("Editar")){
+            lbltituloFormulario.setText("Editar Cliente");
+        }
         btnguardar.setText("Guardar cambios");
     }
     

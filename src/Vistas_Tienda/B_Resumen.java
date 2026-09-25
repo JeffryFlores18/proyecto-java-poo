@@ -34,80 +34,247 @@ public class B_Resumen extends javax.swing.JPanel {
     
     
 public void cargarDatosDashboard() {
-        try {
-            Connection con = conexionLiv.conectar();
-            
-            // ---------------------------------------------------------
-            // 1. LLENAR LOS CUADROS DE TEXTO (Usando la última venta)
-            // ---------------------------------------------------------
-            // Ingresos del último día registrado
-            String sqlIngresos = "SELECT COALESCE(SUM(total), 0) FROM venta WHERE fecha = (SELECT MAX(fecha) FROM venta)";
-            PreparedStatement ps1 = con.prepareStatement(sqlIngresos);
-            ResultSet rs1 = ps1.executeQuery();
-            if(rs1.next()) {
-                txtIngresos.setText(String.format("S/ %.2f", rs1.getDouble(1)));
-            }
-            
-            // Ventas del último día registrado
-            String sqlVentas = "SELECT COUNT(*) FROM venta WHERE fecha = (SELECT MAX(fecha) FROM venta)";
-            PreparedStatement ps2 = con.prepareStatement(sqlVentas);
-            ResultSet rs2 = ps2.executeQuery();
-            if(rs2.next()) {
-                txtVentasHoy.setText(String.valueOf(rs2.getInt(1)));
-            }
-            
-            // Cantidad de productos total (esto no cambia, es todo el inventario)
-            String sqlProductos = "SELECT COALESCE(SUM(stock_inventario), 0) FROM producto";
-            PreparedStatement ps3 = con.prepareStatement(sqlProductos);
-            ResultSet rs3 = ps3.executeQuery();
-            if(rs3.next()) {
-                txtCantidadProductos.setText(String.valueOf(rs3.getInt(1)));
-            }
+       try {
 
-            // ---------------------------------------------------------
-            // 2. EXTRAER DATOS PARA EL GRÁFICO (Semana de la última venta)
-            // ---------------------------------------------------------
-            int[] ventasSemana = new int[]{0, 0, 0, 0, 0, 0, 0}; 
-            
-            // Trae las ventas de la semana a la que pertenece la última venta registrada
-            String sqlGrafico = "SELECT WEEKDAY(v.fecha) AS dia_semana, SUM(d.cantidad) AS total_vendido " +
-                                "FROM venta v " +
-                                "INNER JOIN detalle_venta d ON v.id_venta = d.id_venta " +
-                                "WHERE YEARWEEK(v.fecha, 1) = YEARWEEK((SELECT MAX(fecha) FROM venta), 1) " +
-                                "GROUP BY dia_semana";
-                                
-            PreparedStatement ps4 = con.prepareStatement(sqlGrafico);
-            ResultSet rs4 = ps4.executeQuery();
-            
-            while(rs4.next()) {
-                int indiceDia = rs4.getInt("dia_semana");
-                int cantidad = rs4.getInt("total_vendido");
-                ventasSemana[indiceDia] = cantidad; // Llena el array según el día (0=Lunes, 6=Domingo)
-            }
-            
-            // Cerrar conexiones
-            rs1.close(); ps1.close();
-            rs2.close(); ps2.close();
-            rs3.close(); ps3.close();
-            rs4.close(); ps4.close();
-            con.close();
-            
-            // ---------------------------------------------------------
-            // 3. DIBUJAR GRÁFICO
-            // ---------------------------------------------------------
-          PanelGrafico.removeAll();
-            PanelGrafico.setLayout(new BorderLayout());
-            
-            // Creamos el lienzo y le forzamos una altura de 350 píxeles para que no se aplaste
-            LienzoGrafico miGrafico = new LienzoGrafico(ventasSemana);
-            miGrafico.setPreferredSize(new java.awt.Dimension(PanelGrafico.getWidth(), 350));
-            
-            PanelGrafico.add(miGrafico, BorderLayout.CENTER);
-            PanelGrafico.revalidate();
-            PanelGrafico.repaint();
-        } catch (Exception e) {
-            System.out.println("Error al cargar Dashboard: " + e.getMessage());
+        Connection con = conexionLiv.conectar();
+
+        // =====================================================
+        // FECHA ACTUAL DE JAVA
+        // =====================================================
+
+        java.time.LocalDate hoy =
+                java.time.LocalDate.now();
+
+        java.sql.Date fechaHoy =
+                java.sql.Date.valueOf(hoy);
+
+        // Obtener lunes y domingo de la semana actual
+        java.time.LocalDate lunes =
+                hoy.with(
+                    java.time.DayOfWeek.MONDAY
+                );
+
+        java.time.LocalDate domingo =
+                hoy.with(
+                    java.time.DayOfWeek.SUNDAY
+                );
+
+        java.sql.Date fechaLunes =
+                java.sql.Date.valueOf(lunes);
+
+        java.sql.Date fechaDomingo =
+                java.sql.Date.valueOf(domingo);
+
+
+        // =====================================================
+        // 1. INGRESOS DE HOY
+        // =====================================================
+
+        String sqlIngresos = """
+            SELECT COALESCE(SUM(total), 0)
+            FROM venta
+            WHERE fecha = ?
+        """;
+
+        PreparedStatement ps1 =
+                con.prepareStatement(sqlIngresos);
+
+        ps1.setDate(1, fechaHoy);
+
+        ResultSet rs1 =
+                ps1.executeQuery();
+
+        if (rs1.next()) {
+
+            txtIngresos.setText(
+                String.format(
+                    "S/ %.2f",
+                    rs1.getDouble(1)
+                )
+            );
         }
+
+
+        // =====================================================
+        // 2. CANTIDAD DE VENTAS DE HOY
+        // =====================================================
+
+        String sqlVentas = """
+            SELECT COUNT(*)
+            FROM venta
+            WHERE fecha = ?
+        """;
+
+        PreparedStatement ps2 =
+                con.prepareStatement(sqlVentas);
+
+        ps2.setDate(1, fechaHoy);
+
+        ResultSet rs2 =
+                ps2.executeQuery();
+
+        if (rs2.next()) {
+
+            txtVentasHoy.setText(
+                String.valueOf(
+                    rs2.getInt(1)
+                )
+            );
+        }
+
+
+        // =====================================================
+        // 3. STOCK TOTAL DE PRODUCTOS
+        // =====================================================
+
+        String sqlProductos = """
+            SELECT COALESCE(
+                SUM(stock_inventario),
+                0
+            )
+            FROM producto
+        """;
+
+        PreparedStatement ps3 =
+                con.prepareStatement(sqlProductos);
+
+        ResultSet rs3 =
+                ps3.executeQuery();
+
+        if (rs3.next()) {
+
+            txtCantidadProductos.setText(
+                String.valueOf(
+                    rs3.getInt(1)
+                )
+            );
+        }
+
+
+        // =====================================================
+        // 4. VENTAS DE LA SEMANA ACTUAL
+        // =====================================================
+
+        int[] ventasSemana =
+                new int[] {
+                    0, 0, 0, 0, 0, 0, 0
+                };
+
+        String sqlGrafico = """
+            SELECT
+                WEEKDAY(fecha) AS dia_semana,
+                COUNT(*) AS cantidad_ventas
+            FROM venta
+            WHERE fecha BETWEEN ? AND ?
+            GROUP BY WEEKDAY(fecha)
+            ORDER BY WEEKDAY(fecha)
+        """;
+
+        PreparedStatement ps4 =
+                con.prepareStatement(sqlGrafico);
+
+        ps4.setDate(
+                1,
+                fechaLunes
+        );
+
+        ps4.setDate(
+                2,
+                fechaDomingo
+        );
+
+        ResultSet rs4 =
+                ps4.executeQuery();
+
+        while (rs4.next()) {
+
+            int indiceDia =
+                    rs4.getInt(
+                        "dia_semana"
+                    );
+
+            int cantidadVentas =
+                    rs4.getInt(
+                        "cantidad_ventas"
+                    );
+
+            // 0 = Lunes
+            // 1 = Martes
+            // 2 = Miércoles
+            // 3 = Jueves
+            // 4 = Viernes
+            // 5 = Sábado
+            // 6 = Domingo
+
+            if (indiceDia >= 0
+                    && indiceDia < 7) {
+
+                ventasSemana[indiceDia] =
+                        cantidadVentas;
+            }
+        }
+
+
+        // =====================================================
+        // CERRAR CONSULTAS
+        // =====================================================
+
+        rs1.close();
+        ps1.close();
+
+        rs2.close();
+        ps2.close();
+
+        rs3.close();
+        ps3.close();
+
+        rs4.close();
+        ps4.close();
+
+        con.close();
+
+
+        // =====================================================
+        // 5. DIBUJAR GRÁFICO
+        // =====================================================
+
+        PanelGrafico.removeAll();
+
+        PanelGrafico.setLayout(
+            new BorderLayout()
+        );
+
+        LienzoGrafico miGrafico =
+                new LienzoGrafico(
+                    ventasSemana
+                );
+
+        miGrafico.setPreferredSize(
+            new java.awt.Dimension(
+                PanelGrafico.getWidth(),
+                350
+            )
+        );
+
+        PanelGrafico.add(
+            miGrafico,
+            BorderLayout.CENTER
+        );
+
+        PanelGrafico.revalidate();
+        PanelGrafico.repaint();
+
+
+    } catch (Exception e) {
+
+        System.out.println(
+            "Error al cargar Dashboard: "
+            + e.getMessage()
+        );
+
+        e.printStackTrace();
+    }
+       
     }
     private void actualizarFechaActual() {
         java.time.LocalDate fechaActual = java.time.LocalDate.now();
@@ -201,6 +368,7 @@ public void cargarDatosDashboard() {
         txtVentasHoy = new javax.swing.JTextField();
         lblFecha = new javax.swing.JLabel();
         PanelGrafico = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(242, 236, 233));
 
@@ -292,7 +460,7 @@ public void cargarDatosDashboard() {
                 .addContainerGap()
                 .addComponent(jLabel5)
                 .addGap(18, 18, 18)
-                .addComponent(txtVentasHoy, javax.swing.GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE)
+                .addComponent(txtVentasHoy)
                 .addGap(39, 39, 39))
         );
 
@@ -308,6 +476,8 @@ public void cargarDatosDashboard() {
             PanelGraficoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 327, Short.MAX_VALUE)
         );
+
+        jLabel6.setText("VENTAS DE LA SEMANA");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -328,13 +498,17 @@ public void cargarDatosDashboard() {
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(44, 44, 44)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(9, 9, 9))))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(PanelGrafico, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(303, 303, 303)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -348,12 +522,13 @@ public void cargarDatosDashboard() {
                 .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(PanelGrafico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(63, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel6)
+                .addContainerGap(29, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
   
@@ -379,6 +554,7 @@ public void cargarDatosDashboard() {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
