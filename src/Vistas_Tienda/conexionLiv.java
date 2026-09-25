@@ -5,14 +5,14 @@ import java.sql.DriverManager;
 
 public class conexionLiv {
     
-    private static final String url = "jdbc:mysql://localhost/alana_store";
+    private static final String url = "jdbc:mysql://localhost/alanastore";
     private static final String user = "root";
     private static final String pass = "";
     
     public static Connection conectar() {
         Connection con = null;
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection(url,user, pass);
 
             System.out.println("Conexion exitosa a ALANA STORE");
