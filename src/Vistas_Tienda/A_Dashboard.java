@@ -4,7 +4,7 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 
 public class A_Dashboard extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(A_Dashboard.class.getName());
 
         public static boolean logeado = false;
