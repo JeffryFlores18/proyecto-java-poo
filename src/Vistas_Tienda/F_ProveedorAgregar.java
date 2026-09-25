@@ -189,9 +189,8 @@ public class F_ProveedorAgregar extends javax.swing.JPanel {
                     "Proveedor agregado correctamente."
             );
 
-            
+            txtRuc.setText("");
             txtRazonSocial.setText("");
-            txtNombre.setText("");
             txtTelefono.setText("");
             txtDireccion.setText("");
             txtEmail.setText("");
