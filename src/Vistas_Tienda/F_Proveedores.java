@@ -91,12 +91,11 @@ public class F_Proveedores extends javax.swing.JPanel {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Maiandra GD", 1, 36)); // NOI18N
-        jLabel1.setIcon(new javax.swing.ImageIcon("D:\\Users\\Usuario\\Documents\\NetBeansProjects\\POO-2026-I\\proyecto-java-poo\\src\\ImagenProveedor\\proveedor\\Alana_Store_logo_100x100_transparente.png")); // NOI18N
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 0, 110, 70));
 
         btnAgregarProveedor.setBackground(new java.awt.Color(202, 125, 117));
         btnAgregarProveedor.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnAgregarProveedor.setIcon(new javax.swing.ImageIcon("D:\\Users\\Usuario\\Documents\\JURADO NACIONAL DE ELECCIONES\\proyecto-java-poo-reparado\\proyecto-java-poo\\src\\ImagenProveedor\\proveedoragregar.png")); // NOI18N
+        btnAgregarProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ImagenProveedor/proveedoragregar.png"))); // NOI18N
         btnAgregarProveedor.setText("AGREGAR PROVEEDOR");
         btnAgregarProveedor.setFocusPainted(false);
         btnAgregarProveedor.addActionListener(this::btnAgregarProveedorActionPerformed);
@@ -104,7 +103,7 @@ public class F_Proveedores extends javax.swing.JPanel {
 
         btnBuscar.setBackground(new java.awt.Color(202, 125, 117));
         btnBuscar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnBuscar.setIcon(new javax.swing.ImageIcon("D:\\Users\\Usuario\\Documents\\JURADO NACIONAL DE ELECCIONES\\proyecto-java-poo-reparado\\proyecto-java-poo\\src\\ImagenProveedor\\proveedorbuscarruc.png")); // NOI18N
+        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ImagenProveedor/proveedorbuscarruc.png"))); // NOI18N
         btnBuscar.setText("BUSCAR POR RUC");
         btnBuscar.setFocusPainted(false);
         btnBuscar.addActionListener(this::btnBuscarActionPerformed);
@@ -112,7 +111,7 @@ public class F_Proveedores extends javax.swing.JPanel {
 
         btnEditar.setBackground(new java.awt.Color(202, 125, 117));
         btnEditar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnEditar.setIcon(new javax.swing.ImageIcon("D:\\Users\\Usuario\\Documents\\JURADO NACIONAL DE ELECCIONES\\proyecto-java-poo-reparado\\proyecto-java-poo\\src\\ImagenProveedor\\proveedoreditar.png")); // NOI18N
+        btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ImagenProveedor/proveedoreditar.png"))); // NOI18N
         btnEditar.setText("EDITAR");
         btnEditar.setFocusPainted(false);
         btnEditar.addActionListener(this::btnEditarActionPerformed);
@@ -120,7 +119,7 @@ public class F_Proveedores extends javax.swing.JPanel {
 
         btnEliminar.setBackground(new java.awt.Color(202, 125, 117));
         btnEliminar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnEliminar.setIcon(new javax.swing.ImageIcon("D:\\Users\\Usuario\\Documents\\JURADO NACIONAL DE ELECCIONES\\proyecto-java-poo-reparado\\proyecto-java-poo\\src\\ImagenProveedor\\proveedor_eliminar.png")); // NOI18N
+        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ImagenProveedor/proveedor_eliminar.png"))); // NOI18N
         btnEliminar.setText("ELIMINAR");
         btnEliminar.setFocusPainted(false);
         btnEliminar.addActionListener(this::btnEliminarActionPerformed);

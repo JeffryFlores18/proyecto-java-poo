@@ -52,9 +52,6 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Maiandra GD" size="36" style="1"/>
             </Property>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="D:\Users\Usuario\Documents\NetBeansProjects\POO-2026-I\proyecto-java-poo\src\ImagenProveedor\proveedor\Alana_Store_logo_100x100_transparente.png"/>
-            </Property>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -71,7 +68,7 @@
               <Font name="Segoe UI" size="12" style="1"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="D:\Users\Usuario\Documents\JURADO NACIONAL DE ELECCIONES\proyecto-java-poo-reparado\proyecto-java-poo\src\ImagenProveedor\proveedoragregar.png"/>
+              <Image iconType="3" name="/ImagenProveedor/proveedoragregar.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="AGREGAR PROVEEDOR"/>
             <Property name="focusPainted" type="boolean" value="false"/>
@@ -94,7 +91,7 @@
               <Font name="Segoe UI" size="12" style="1"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="D:\Users\Usuario\Documents\JURADO NACIONAL DE ELECCIONES\proyecto-java-poo-reparado\proyecto-java-poo\src\ImagenProveedor\proveedorbuscarruc.png"/>
+              <Image iconType="3" name="/ImagenProveedor/proveedorbuscarruc.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="BUSCAR POR RUC"/>
             <Property name="focusPainted" type="boolean" value="false"/>
@@ -117,7 +114,7 @@
               <Font name="Segoe UI" size="12" style="1"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="D:\Users\Usuario\Documents\JURADO NACIONAL DE ELECCIONES\proyecto-java-poo-reparado\proyecto-java-poo\src\ImagenProveedor\proveedoreditar.png"/>
+              <Image iconType="3" name="/ImagenProveedor/proveedoreditar.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="EDITAR"/>
             <Property name="focusPainted" type="boolean" value="false"/>
@@ -140,7 +137,7 @@
               <Font name="Segoe UI" size="12" style="1"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="D:\Users\Usuario\Documents\JURADO NACIONAL DE ELECCIONES\proyecto-java-poo-reparado\proyecto-java-poo\src\ImagenProveedor\proveedor_eliminar.png"/>
+              <Image iconType="3" name="/ImagenProveedor/proveedor_eliminar.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="ELIMINAR"/>
             <Property name="focusPainted" type="boolean" value="false"/>

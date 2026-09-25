@@ -44,21 +44,20 @@ public class F_ProveedorBuscarPorRuc extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("Maiandra GD", 1, 36)); // NOI18N
         jLabel1.setText("BUSCAR PROVEEDOR ");
         jPanel1.add(jLabel1);
-        jLabel1.setBounds(50, 20, 386, 44);
+        jLabel1.setBounds(50, 20, 403, 47);
 
         btnBuscar.setBackground(new java.awt.Color(202, 125, 117));
         btnBuscar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnBuscar.setIcon(new javax.swing.ImageIcon("D:\\Users\\Usuario\\Documents\\NetBeansProjects\\POO-2026-I\\proyecto-java-poo\\src\\ImagenProveedor\\lupa_negra_32x32.png")); // NOI18N
+        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ImagenProveedor/proveedorbuscarruc.png"))); // NOI18N
         btnBuscar.setText("BUSCAR");
         btnBuscar.addActionListener(this::btnBuscarActionPerformed);
         jPanel1.add(btnBuscar);
         btnBuscar.setBounds(590, 90, 130, 46);
 
         jLabel3.setFont(new java.awt.Font("Maiandra GD", 1, 18)); // NOI18N
-        jLabel3.setIcon(new javax.swing.ImageIcon("D:\\Users\\Usuario\\Documents\\NetBeansProjects\\POO-2026-I\\proyecto-java-poo\\src\\ImagenProveedor\\icono_resultados_negro_32x32.png")); // NOI18N
         jLabel3.setText("Resultados de la busqueda: ");
         jPanel1.add(jLabel3);
-        jLabel3.setBounds(50, 160, 280, 32);
+        jLabel3.setBounds(50, 160, 280, 24);
         jPanel1.add(txtRuc);
         txtRuc.setBounds(180, 90, 393, 46);
 
@@ -80,14 +79,13 @@ public class F_ProveedorBuscarPorRuc extends javax.swing.JPanel {
 
         btnSalir.setBackground(new java.awt.Color(202, 125, 117));
         btnSalir.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnSalir.setIcon(new javax.swing.ImageIcon("D:\\Users\\Usuario\\Documents\\NetBeansProjects\\POO-2026-I\\proyecto-java-poo\\src\\ImagenProveedor\\icono_salir_negro_32x32.png")); // NOI18N
+        btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ImagenProveedor/icono_salir_negro_32x32.png"))); // NOI18N
         btnSalir.setText("SALIR");
         btnSalir.addActionListener(this::btnSalirActionPerformed);
         jPanel1.add(btnSalir);
         btnSalir.setBounds(280, 570, 200, 60);
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel4.setIcon(new javax.swing.ImageIcon("D:\\Users\\Usuario\\Documents\\NetBeansProjects\\POO-2026-I\\proyecto-java-poo\\src\\ImagenProveedor\\icono_buscar.png")); // NOI18N
         jLabel4.setText("RUC:");
         jPanel1.add(jLabel4);
         jLabel4.setBounds(50, 90, 150, 50);

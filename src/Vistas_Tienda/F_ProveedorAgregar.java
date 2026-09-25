@@ -34,45 +34,39 @@ public class F_ProveedorAgregar extends javax.swing.JPanel {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel1.setIcon(new javax.swing.ImageIcon("D:\\Users\\Usuario\\Documents\\Downloads\\Iconos_AlanaStore_32x32\\ruc.png")); // NOI18N
         jLabel1.setText("RUC:");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, 80, 41));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel2.setIcon(new javax.swing.ImageIcon("D:\\Users\\Usuario\\Documents\\Downloads\\Iconos_AlanaStore_32x32\\razon_social.png")); // NOI18N
         jLabel2.setText("RAZON SOCIAL:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, 150, 40));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel3.setIcon(new javax.swing.ImageIcon("D:\\Users\\Usuario\\Documents\\Downloads\\Iconos_AlanaStore_32x32\\telefono.png")); // NOI18N
         jLabel3.setText("TELEFONO:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, 110, 38));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel4.setIcon(new javax.swing.ImageIcon("D:\\Users\\Usuario\\Documents\\Downloads\\Iconos_AlanaStore_32x32\\direccion.png")); // NOI18N
         jLabel4.setText("DIRECCION:");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 310, -1, 40));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel6.setIcon(new javax.swing.ImageIcon("D:\\Users\\Usuario\\Documents\\Downloads\\Iconos_AlanaStore_32x32\\email.png")); // NOI18N
         jLabel6.setText("EMAIL:");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 380, 90, 30));
 
         jLabel7.setFont(new java.awt.Font("Maiandra GD", 1, 48)); // NOI18N
-        jLabel7.setIcon(new javax.swing.ImageIcon("D:\\Users\\Usuario\\Documents\\NetBeansProjects\\POO-2026-I\\proyecto-java-poo\\src\\ImagenProveedor\\logo_alanastore.png")); // NOI18N
         jLabel7.setText("AGREGAR PROVEEDOR ");
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(31, 20, 750, 60));
 
         btnGuardar.setBackground(new java.awt.Color(202, 125, 117));
         btnGuardar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnGuardar.setIcon(new javax.swing.ImageIcon("D:\\Users\\Usuario\\Documents\\Downloads\\Iconos_AlanaStore_32x32\\guardar.png")); // NOI18N
+        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ImagenProveedor/guardar.png"))); // NOI18N
         btnGuardar.setText("GUARDAR");
         btnGuardar.addActionListener(this::btnGuardarActionPerformed);
         jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 490, 210, 70));
 
         btnCancelar.setBackground(new java.awt.Color(202, 125, 117));
         btnCancelar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnCancelar.setIcon(new javax.swing.ImageIcon("D:\\Users\\Usuario\\Documents\\Downloads\\Iconos_AlanaStore_32x32\\cancelar.png")); // NOI18N
+        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ImagenProveedor/icono_cancelar_negro_32x32.png"))); // NOI18N
         btnCancelar.setText("CANCELAR");
         btnCancelar.addActionListener(this::btnCancelarActionPerformed);
         jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 490, 220, 70));

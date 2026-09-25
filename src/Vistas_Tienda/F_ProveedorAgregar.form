@@ -49,9 +49,6 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="14" style="1"/>
             </Property>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="D:\Users\Usuario\Documents\Downloads\Iconos_AlanaStore_32x32\ruc.png"/>
-            </Property>
             <Property name="text" type="java.lang.String" value="RUC:"/>
           </Properties>
           <Constraints>
@@ -64,9 +61,6 @@
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="14" style="1"/>
-            </Property>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="D:\Users\Usuario\Documents\Downloads\Iconos_AlanaStore_32x32\razon_social.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="RAZON SOCIAL:"/>
           </Properties>
@@ -81,9 +75,6 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="14" style="1"/>
             </Property>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="D:\Users\Usuario\Documents\Downloads\Iconos_AlanaStore_32x32\telefono.png"/>
-            </Property>
             <Property name="text" type="java.lang.String" value="TELEFONO:"/>
           </Properties>
           <Constraints>
@@ -96,9 +87,6 @@
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="14" style="1"/>
-            </Property>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="D:\Users\Usuario\Documents\Downloads\Iconos_AlanaStore_32x32\direccion.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="DIRECCION:"/>
           </Properties>
@@ -113,9 +101,6 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="14" style="1"/>
             </Property>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="D:\Users\Usuario\Documents\Downloads\Iconos_AlanaStore_32x32\email.png"/>
-            </Property>
             <Property name="text" type="java.lang.String" value="EMAIL:"/>
           </Properties>
           <Constraints>
@@ -128,9 +113,6 @@
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Maiandra GD" size="48" style="1"/>
-            </Property>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="D:\Users\Usuario\Documents\NetBeansProjects\POO-2026-I\proyecto-java-poo\src\ImagenProveedor\logo_alanastore.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="AGREGAR PROVEEDOR "/>
           </Properties>
@@ -149,7 +131,7 @@
               <Font name="Segoe UI" size="12" style="1"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="D:\Users\Usuario\Documents\Downloads\Iconos_AlanaStore_32x32\guardar.png"/>
+              <Image iconType="3" name="/ImagenProveedor/guardar.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="GUARDAR"/>
           </Properties>
@@ -171,7 +153,7 @@
               <Font name="Segoe UI" size="12" style="1"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="D:\Users\Usuario\Documents\Downloads\Iconos_AlanaStore_32x32\cancelar.png"/>
+              <Image iconType="3" name="/ImagenProveedor/icono_cancelar_negro_32x32.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="CANCELAR"/>
           </Properties>
