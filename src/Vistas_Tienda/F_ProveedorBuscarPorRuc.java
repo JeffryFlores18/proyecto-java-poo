@@ -24,6 +24,18 @@ public class F_ProveedorBuscarPorRuc extends javax.swing.JPanel {
         tablaResultados = new javax.swing.JTable();
         btnSalir = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
+        txtEmail1 = new javax.swing.JTextField();
+        txtID = new javax.swing.JTextField();
+        txtRUC1 = new javax.swing.JTextField();
+        txtRazon = new javax.swing.JTextField();
+        txtTelf = new javax.swing.JTextField();
+        txtUbi = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
 
         jPanel1.setBackground(new java.awt.Color(255, 247, 244));
         jPanel1.setPreferredSize(new java.awt.Dimension(800, 700));
@@ -64,7 +76,7 @@ public class F_ProveedorBuscarPorRuc extends javax.swing.JPanel {
         jScrollPane1.setViewportView(tablaResultados);
 
         jPanel1.add(jScrollPane1);
-        jScrollPane1.setBounds(50, 200, 670, 320);
+        jScrollPane1.setBounds(50, 200, 670, 110);
 
         btnSalir.setBackground(new java.awt.Color(202, 125, 117));
         btnSalir.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -79,6 +91,54 @@ public class F_ProveedorBuscarPorRuc extends javax.swing.JPanel {
         jLabel4.setText("RUC:");
         jPanel1.add(jLabel4);
         jLabel4.setBounds(50, 90, 150, 50);
+
+        txtEmail1.addActionListener(this::txtEmail1ActionPerformed);
+        jPanel1.add(txtEmail1);
+        txtEmail1.setBounds(450, 490, 270, 40);
+        jPanel1.add(txtID);
+        txtID.setBounds(100, 350, 270, 40);
+        jPanel1.add(txtRUC1);
+        txtRUC1.setBounds(100, 420, 270, 40);
+
+        txtRazon.addActionListener(this::txtRazonActionPerformed);
+        jPanel1.add(txtRazon);
+        txtRazon.setBounds(100, 490, 270, 40);
+
+        txtTelf.addActionListener(this::txtTelfActionPerformed);
+        jPanel1.add(txtTelf);
+        txtTelf.setBounds(450, 350, 270, 40);
+        jPanel1.add(txtUbi);
+        txtUbi.setBounds(450, 410, 270, 40);
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel2.setText("ID:");
+        jPanel1.add(jLabel2);
+        jLabel2.setBounds(40, 350, 30, 40);
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel5.setText("RUC:");
+        jPanel1.add(jLabel5);
+        jLabel5.setBounds(40, 420, 40, 40);
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel6.setText("RAZON:");
+        jPanel1.add(jLabel6);
+        jLabel6.setBounds(40, 490, 50, 40);
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel7.setText("TELF:");
+        jPanel1.add(jLabel7);
+        jLabel7.setBounds(400, 350, 28, 40);
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel8.setText("UBI:");
+        jPanel1.add(jLabel8);
+        jLabel8.setBounds(400, 410, 40, 40);
+
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel9.setText("EMAIL:");
+        jPanel1.add(jLabel9);
+        jLabel9.setBounds(400, 490, 50, 40);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -139,6 +199,7 @@ public class F_ProveedorBuscarPorRuc extends javax.swing.JPanel {
 
             if (resultado.next()) {
 
+                // Mostrar los datos en la tabla
                 modelo.addRow(new Object[]{
                     resultado.getInt("id_proveedor"),
                     resultado.getString("ruc"),
@@ -147,6 +208,14 @@ public class F_ProveedorBuscarPorRuc extends javax.swing.JPanel {
                     resultado.getString("direccion"),
                     resultado.getString("email")
                 });
+
+                // Mostrar los datos en los JTextField
+                txtID.setText(String.valueOf(resultado.getInt("id_proveedor")));
+                txtRUC1.setText(resultado.getString("ruc"));
+                txtRazon.setText(resultado.getString("razon_social"));
+                txtTelf.setText(resultado.getString("telefono"));
+                txtUbi.setText(resultado.getString("direccion"));
+                txtEmail1.setText(resultado.getString("email"));
 
             } else {
 
@@ -176,16 +245,40 @@ public class F_ProveedorBuscarPorRuc extends javax.swing.JPanel {
         ventana.dispose();
     }//GEN-LAST:event_btnSalirActionPerformed
 
+    private void txtRazonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRazonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtRazonActionPerformed
+
+    private void txtEmail1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmail1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtEmail1ActionPerformed
+
+    private void txtTelfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTelfActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTelfActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnSalir;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tablaResultados;
+    private javax.swing.JTextField txtEmail1;
+    private javax.swing.JTextField txtID;
+    private javax.swing.JTextField txtRUC1;
+    private javax.swing.JTextField txtRazon;
     private javax.swing.JTextField txtRuc;
+    private javax.swing.JTextField txtTelf;
+    private javax.swing.JTextField txtUbi;
     // End of variables declaration//GEN-END:variables
 }
