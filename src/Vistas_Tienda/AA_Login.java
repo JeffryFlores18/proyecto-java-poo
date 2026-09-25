@@ -4,15 +4,14 @@ package Vistas_Tienda;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 /**
  *
  * @author PC
  */
 public class AA_Login extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AA_Login.class.getName());
-    
+
     /**
      * Creates new form A_Login
      */
@@ -123,14 +122,14 @@ public class AA_Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrarActionPerformed
- String user = txtUser.getText();
-    String pass = new String(txtPassword.getPassword());
+        String user = txtUser.getText();
+        String pass = new String(txtPassword.getPassword());
         if ("LuchoPapucho@gmail.com".equals(user) && "12345".equals(pass)) {
-        A_Dashboard dashboard = new A_Dashboard();
-        dashboard.setVisible(true);
-        this.dispose(); 
-            } else {
-        javax.swing.JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
+            A_Dashboard dashboard = new A_Dashboard();
+            dashboard.setVisible(true);
+            this.dispose();
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
         }        // TODO add your handling code here:
     }//GEN-LAST:event_btnEntrarActionPerformed
 

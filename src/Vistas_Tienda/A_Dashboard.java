@@ -7,17 +7,18 @@ public class A_Dashboard extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(A_Dashboard.class.getName());
 
-        public static boolean logeado = false;
-        
-    public void mostrarPanel(JPanel p){    
-        p.setSize(800,700);
-        p.setLocation(0,0);
-        
+    public static boolean logeado = false;
+
+    public void mostrarPanel(JPanel p) {
+        p.setSize(800, 700);
+        p.setLocation(0, 0);
+
         content.removeAll();
-        content.add(p,BorderLayout.CENTER);
+        content.add(p, BorderLayout.CENTER);
         content.revalidate();
         content.repaint();
-    }   
+    }
+
     //hola hola 
     public A_Dashboard() {
         initComponents();
@@ -174,19 +175,19 @@ public class A_Dashboard extends javax.swing.JFrame {
         // TODO add your handling code here:
         D_Clientesp p = new D_Clientesp();
         mostrarPanel(p);
-        
+
     }//GEN-LAST:event_btnClientesActionPerformed
 
     private void btnVentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVentasActionPerformed
         // TODO add your handling code here:
-        
+
         E_Ventas p = new E_Ventas();
         mostrarPanel(p);
     }//GEN-LAST:event_btnVentasActionPerformed
 
     private void btnProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProveedoresActionPerformed
         // TODO add your handling code here:
-        
+
         F_Proveedores p = new F_Proveedores();
         mostrarPanel(p);
     }//GEN-LAST:event_btnProveedoresActionPerformed

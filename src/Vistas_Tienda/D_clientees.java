@@ -1,9 +1,7 @@
-
 package Vistas_Tienda;
 
-
 public class D_clientees {
-    
+
     private int IDcliente;
     private String dni;
     private String nombre;
@@ -51,8 +49,4 @@ public class D_clientees {
         this.telefono = telefono;
     }
 
-    
-    
-    
-    
 }

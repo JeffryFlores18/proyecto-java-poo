@@ -1,4 +1,5 @@
 package Vistas_Tienda;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,89 +17,94 @@ import javax.swing.table.DefaultTableModel;
  * @author PC
  */
 public class C_Productos extends javax.swing.JPanel {
-private boolean modoEdicion = false;
+
+    private boolean modoEdicion = false;
+
     /**
      * Creates new form B_Resumen
      */
     public C_Productos() {
         initComponents();
         DefaultTableModel modelo = (DefaultTableModel) tablaProductos.getModel();
-        
+
         modelo.addRow(new Object[]{""});
-                modelo.addRow(new Object[]{""});
         modelo.addRow(new Object[]{""});
-                        modelo.addRow(new Object[]{""});
-                        mostrarProductos("TODO", "");
-        cargarIconoProducto();                
+        modelo.addRow(new Object[]{""});
+        modelo.addRow(new Object[]{""});
+        mostrarProductos("TODO", "");
+        cargarIconoProducto();
     }
+
     private void cargarIconoProducto() {
 
-     javax.swing.ImageIcon icono =
-            new javax.swing.ImageIcon(
-                    getClass().getResource(
-                            "/ImagenProductos/producto.png"
-                    )
-            );
+        javax.swing.ImageIcon icono
+                = new javax.swing.ImageIcon(
+                        getClass().getResource(
+                                "/ImagenProductos/producto.png"
+                        )
+                );
 
-    java.awt.Image imagen =
-            icono.getImage().getScaledInstance(
-                    100,
-                    100,
-                    java.awt.Image.SCALE_SMOOTH
-            );
+        java.awt.Image imagen
+                = icono.getImage().getScaledInstance(
+                        100,
+                        100,
+                        java.awt.Image.SCALE_SMOOTH
+                );
 
-    lblProducto.setIcon(
-            new javax.swing.ImageIcon(imagen)
-    );
-}
-public void mostrarProductos(String buscarPor, String valorBusqueda) {
-    DefaultTableModel modelo = (DefaultTableModel) tablaProductos.getModel();
-    modelo.setRowCount(0); // Limpiar la tabla antes de cargar nuevos datos
-
-    String sql = "SELECT * FROM producto";
-    
-    // Configurar la consulta según el filtro
-    if (buscarPor.equals("ID")) {
-        sql += " WHERE id_producto = ?";
-    } else if (buscarPor.equals("PRODUCTO")) {
-        sql += " WHERE tipo_prenda LIKE ? OR descripcion LIKE ?";
+        lblProducto.setIcon(
+                new javax.swing.ImageIcon(imagen)
+        );
     }
 
-    try {
-        Connection con = conexionLiv.conectar();
-        PreparedStatement ps = con.prepareStatement(sql);
+    public void mostrarProductos(String buscarPor, String valorBusqueda) {
+        DefaultTableModel modelo = (DefaultTableModel) tablaProductos.getModel();
+        modelo.setRowCount(0); // Limpiar la tabla antes de cargar nuevos datos
 
-        // Inyectar los valores de búsqueda
+        String sql = "SELECT * FROM producto";
+
+        // Configurar la consulta según el filtro
         if (buscarPor.equals("ID")) {
-            ps.setInt(1, Integer.parseInt(valorBusqueda));
+            sql += " WHERE id_producto = ?";
         } else if (buscarPor.equals("PRODUCTO")) {
-            ps.setString(1, "%" + valorBusqueda + "%");
-            ps.setString(2, "%" + valorBusqueda + "%");
+            sql += " WHERE tipo_prenda LIKE ? OR descripcion LIKE ?";
         }
 
-        ResultSet rs = ps.executeQuery();
+        try {
+            Connection con = conexionLiv.conectar();
+            PreparedStatement ps = con.prepareStatement(sql);
 
-        while (rs.next()) {
-            Object[] fila = new Object[7];
-            fila[0] = rs.getInt("id_producto");
-            fila[1] = rs.getString("tipo_prenda"); // PRODUCTO
-            fila[2] = rs.getString("tipo_prenda"); // TIPO PRENDA
-            fila[3] = rs.getString("descripcion"); // DESCRIPCION
-            fila[4] = rs.getInt("stock_inventario"); // STOCK
-            fila[5] = String.format("S/ %.2f", rs.getDouble("precio")); // PRECIO
-            fila[6] = ""; // DETALLES (Se deja vacío como solicitaste)
+            // Inyectar los valores de búsqueda
+            if (buscarPor.equals("ID")) {
+                ps.setInt(1, Integer.parseInt(valorBusqueda));
+            } else if (buscarPor.equals("PRODUCTO")) {
+                ps.setString(1, "%" + valorBusqueda + "%");
+                ps.setString(2, "%" + valorBusqueda + "%");
+            }
 
-            modelo.addRow(fila);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Object[] fila = new Object[7];
+                fila[0] = rs.getInt("id_producto");
+                fila[1] = rs.getString("tipo_prenda"); // PRODUCTO
+                fila[2] = rs.getString("tipo_prenda"); // TIPO PRENDA
+                fila[3] = rs.getString("descripcion"); // DESCRIPCION
+                fila[4] = rs.getInt("stock_inventario"); // STOCK
+                fila[5] = String.format("S/ %.2f", rs.getDouble("precio")); // PRECIO
+                fila[6] = ""; // DETALLES 
+
+                modelo.addRow(fila);
+            }
+
+            rs.close();
+            ps.close();
+            con.close();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar productos: " + e.getMessage());
         }
-        
-        rs.close();
-        ps.close();
-        con.close();
-        
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error al cargar productos: " + e.getMessage());
     }
-}
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -320,64 +326,55 @@ public void mostrarProductos(String buscarPor, String valorBusqueda) {
 
     private void btnBuscarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProductoActionPerformed
         String nombreBusqueda = JOptionPane.showInputDialog(this, "Ingrese el nombre o descripción del producto:");
-    
-    if (nombreBusqueda != null && !nombreBusqueda.trim().isEmpty()) {
-        mostrarProductos("PRODUCTO", nombreBusqueda.trim());
-    } else if (nombreBusqueda != null && nombreBusqueda.trim().isEmpty()) {
-        mostrarProductos("TODO", ""); // Recargar toda la tabla si se deja vacío
-    }// TODO add your handling code here:
+
+        if (nombreBusqueda != null && !nombreBusqueda.trim().isEmpty()) {
+            mostrarProductos("PRODUCTO", nombreBusqueda.trim());
+        } else if (nombreBusqueda != null && nombreBusqueda.trim().isEmpty()) {
+            mostrarProductos("TODO", "");
+        }// TODO add your handling code here:
     }//GEN-LAST:event_btnBuscarProductoActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-// Cambiamos el estado: si era false pasa a true, si era true pasa a false
-    modoEdicion = !modoEdicion; 
-    
-    if (modoEdicion) {
-        // --- MODO EDICIÓN ACTIVADO ---
-        btnEditar.setText("CANCELAR EDICIÓN"); // Cambiamos el texto del botón
-        btnEditar.setBackground(new java.awt.Color(255, 102, 102)); // Opcional: ponerlo rojito
-        
-        // Creamos un modelo nuevo que SÍ permite editar (excepto el ID)
-        javax.swing.table.DefaultTableModel modeloEditable = new javax.swing.table.DefaultTableModel(
-            new Object [][] {},
-            new String [] {"ID", "PRODUCTO", "TIPO PRENDA", "DESCRIPCION", "STOCK", "PRECIO", "DETALLES"}
-        ) {
-            // true significa que la columna se puede escribir, false que está bloqueada
-            boolean[] canEdit = new boolean [] {
-                false, true, true, true, true, true, false
+        modoEdicion = !modoEdicion;
+
+        if (modoEdicion) {
+            btnEditar.setText("CANCELAR EDICIÓN");
+            btnEditar.setBackground(new java.awt.Color(255, 102, 102));
+
+            javax.swing.table.DefaultTableModel modeloEditable = new javax.swing.table.DefaultTableModel(
+                    new Object[][]{},
+                    new String[]{"ID", "PRODUCTO", "TIPO PRENDA", "DESCRIPCION", "STOCK", "PRECIO", "DETALLES"}
+            ) {
+                boolean[] canEdit = new boolean[]{
+                    false, true, true, true, true, true, false
+                };
+
+                @Override
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    return canEdit[columnIndex];
+                }
             };
 
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        };
-        
-        // Aplicamos el modelo editable a la tabla
-        tablaProductos.setModel(modeloEditable);
-        
-    } else {
-        // --- MODO EDICIÓN DESACTIVADO ---
-        btnEditar.setText("EDITAR");
-        btnEditar.setBackground(new java.awt.Color(255, 255, 255)); // Color normal
-        
-        // Creamos un modelo que bloquea absolutamente todo
-        javax.swing.table.DefaultTableModel modeloBloqueado = new javax.swing.table.DefaultTableModel(
-            new Object [][] {},
-            new String [] {"ID", "PRODUCTO", "TIPO PRENDA", "DESCRIPCION", "STOCK", "PRECIO", "DETALLES"}
-        ) {
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return false; // Todo bloqueado
-            }
-        };
-        
-        // Aplicamos el modelo bloqueado a la tabla
-        tablaProductos.setModel(modeloBloqueado);
-    }
-    
-    // Como cambiamos el modelo (quedó vacío), volvemos a cargar los datos de la base de datos
-    mostrarProductos("TODO", "");
+            tablaProductos.setModel(modeloEditable);
+
+        } else {
+            btnEditar.setText("EDITAR");
+            btnEditar.setBackground(new java.awt.Color(255, 255, 255));
+
+            javax.swing.table.DefaultTableModel modeloBloqueado = new javax.swing.table.DefaultTableModel(
+                    new Object[][]{},
+                    new String[]{"ID", "PRODUCTO", "TIPO PRENDA", "DESCRIPCION", "STOCK", "PRECIO", "DETALLES"}
+            ) {
+                @Override
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    return false; // Todo bloqueado
+                }
+            };
+            tablaProductos.setModel(modeloBloqueado);
+        }
+
+        // Como cambiamos el modelo (quedó vacío), volvemos a cargar los datos de la base de datos
+        mostrarProductos("TODO", "");
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnBuscarIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarIDActionPerformed
@@ -385,115 +382,112 @@ public void mostrarProductos(String buscarPor, String valorBusqueda) {
 
         if (idBusqueda != null && !idBusqueda.trim().isEmpty()) {
             try {
-                Integer.parseInt(idBusqueda.trim()); // Validar que sea un número
+                Integer.parseInt(idBusqueda.trim());
                 mostrarProductos("ID", idBusqueda.trim());
-            } catch(NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, "El ID debe ser un número entero válido.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else if (idBusqueda != null && idBusqueda.trim().isEmpty()) {
-            mostrarProductos("TODO", ""); // Recargar toda la tabla si se deja vacío
+            mostrarProductos("TODO", "");
         }
     }//GEN-LAST:event_btnBuscarIDActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         int fila = tablaProductos.getSelectedRow();
 
-    if (fila == -1) {
-        JOptionPane.showMessageDialog(
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Seleccione un producto para eliminar.",
+                    "Aviso",
+                    JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
+
+        int idProducto = Integer.parseInt(
+                tablaProductos.getValueAt(fila, 0).toString()
+        );
+
+        String producto = tablaProductos
+                .getValueAt(fila, 1)
+                .toString();
+
+        int respuesta = JOptionPane.showConfirmDialog(
                 this,
-                "Seleccione un producto para eliminar.",
-                "Aviso",
+                "¿Seguro que desea eliminar el producto?\n\n"
+                + "ID: " + idProducto
+                + "\nProducto: " + producto,
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION,
                 JOptionPane.WARNING_MESSAGE
         );
-        return;
-    }
 
-    int idProducto = Integer.parseInt(
-            tablaProductos.getValueAt(fila, 0).toString()
-    );
+        if (respuesta != JOptionPane.YES_OPTION) {
+            return;
+        }
 
-    String producto = tablaProductos
-            .getValueAt(fila, 1)
-            .toString();
+        String sql = "DELETE FROM producto WHERE id_producto = ?";
 
-    int respuesta = JOptionPane.showConfirmDialog(
-            this,
-            "¿Seguro que desea eliminar el producto?\n\n"
-            + "ID: " + idProducto
-            + "\nProducto: " + producto,
-            "Confirmar eliminación",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.WARNING_MESSAGE
-    );
+        try (
+                Connection con = conexionLiv.conectar(); PreparedStatement ps = con.prepareStatement(sql)) {
 
-    if (respuesta != JOptionPane.YES_OPTION) {
-        return;
-    }
+            ps.setInt(1, idProducto);
 
-    String sql = "DELETE FROM producto WHERE id_producto = ?";
+            int resultado = ps.executeUpdate();
 
-    try (
-        Connection con = conexionLiv.conectar();
-        PreparedStatement ps = con.prepareStatement(sql)
-    ) {
+            if (resultado > 0) {
 
-        ps.setInt(1, idProducto);
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Producto eliminado correctamente."
+                );
 
-        int resultado = ps.executeUpdate();
+                mostrarProductos("TODO", "");
 
-        if (resultado > 0) {
+            } else {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "No se pudo eliminar el producto.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+
+        } catch (Exception e) {
 
             JOptionPane.showMessageDialog(
                     this,
-                    "Producto eliminado correctamente."
-            );
-
-            mostrarProductos("TODO", "");
-
-        } else {
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "No se pudo eliminar el producto.",
+                    "Error al eliminar el producto:\n"
+                    + e.getMessage(),
                     "Error",
                     JOptionPane.ERROR_MESSAGE
             );
         }
-
-    } catch (Exception e) {
-
-        JOptionPane.showMessageDialog(
-                this,
-                "Error al eliminar el producto:\n"
-                + e.getMessage(),
-                "Error",
-                JOptionPane.ERROR_MESSAGE
-        );
-    }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnActualizarStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarStockActionPerformed
         DefaultTableModel modelo = (DefaultTableModel) tablaProductos.getModel();
-        
+
         modelo.addRow(new Object[]{""});
-                modelo.addRow(new Object[]{""});
         modelo.addRow(new Object[]{""});
-                        modelo.addRow(new Object[]{""});
-                        mostrarProductos("TODO", "");
+        modelo.addRow(new Object[]{""});
+        modelo.addRow(new Object[]{""});
+        mostrarProductos("TODO", "");
     }//GEN-LAST:event_btnActualizarStockActionPerformed
 
     private void btnAgregarNuevoProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarNuevoProductoActionPerformed
-       A_Dashboard dashboard =
-            (A_Dashboard)
-            javax.swing.SwingUtilities
-                    .getWindowAncestor(this);
+        A_Dashboard dashboard
+                = (A_Dashboard) javax.swing.SwingUtilities
+                        .getWindowAncestor(this);
 
-    if (dashboard != null) {
+        if (dashboard != null) {
 
-        dashboard.mostrarPanel(
-                new C_Productos_Nuevo_Producto()
-        );
-    }
+            dashboard.mostrarPanel(
+                    new C_Productos_Nuevo_Producto()
+            );
+        }
     }//GEN-LAST:event_btnAgregarNuevoProductoActionPerformed
 
 

@@ -13,121 +13,112 @@ import javax.swing.SwingUtilities;
 
 public class B_Resumen extends javax.swing.JPanel {
 
-    
     public B_Resumen() {
         initComponents();
         actualizarFechaActual();
-        
+
         // Bloquear edicion
         txtIngresos.setEditable(false);
         txtVentasHoy.setEditable(false);
         txtCantidadProductos.setEditable(false);
-        
+
         // Ejecutar la carga de datos de la base de datos de forma segura
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 cargarDatosDashboard();
             }
         });
-    
+
     }
-    
-    
-public void cargarDatosDashboard() {
-       try {
 
-        Connection con = conexionLiv.conectar();
+    public void cargarDatosDashboard() {
+        try {
 
-        // =====================================================
-        // FECHA ACTUAL DE JAVA
-        // =====================================================
+            Connection con = conexionLiv.conectar();
 
-        java.time.LocalDate hoy =
-                java.time.LocalDate.now();
+            // =====================================================
+            // FECHA ACTUAL DE JAVA
+            // =====================================================
+            java.time.LocalDate hoy
+                    = java.time.LocalDate.now();
 
-        java.sql.Date fechaHoy =
-                java.sql.Date.valueOf(hoy);
+            java.sql.Date fechaHoy
+                    = java.sql.Date.valueOf(hoy);
 
-        // Obtener lunes y domingo de la semana actual
-        java.time.LocalDate lunes =
-                hoy.with(
-                    java.time.DayOfWeek.MONDAY
-                );
+            // Obtener lunes y domingo de la semana actual
+            java.time.LocalDate lunes
+                    = hoy.with(
+                            java.time.DayOfWeek.MONDAY
+                    );
 
-        java.time.LocalDate domingo =
-                hoy.with(
-                    java.time.DayOfWeek.SUNDAY
-                );
+            java.time.LocalDate domingo
+                    = hoy.with(
+                            java.time.DayOfWeek.SUNDAY
+                    );
 
-        java.sql.Date fechaLunes =
-                java.sql.Date.valueOf(lunes);
+            java.sql.Date fechaLunes
+                    = java.sql.Date.valueOf(lunes);
 
-        java.sql.Date fechaDomingo =
-                java.sql.Date.valueOf(domingo);
+            java.sql.Date fechaDomingo
+                    = java.sql.Date.valueOf(domingo);
 
-
-        // =====================================================
-        // 1. INGRESOS DE HOY
-        // =====================================================
-
-        String sqlIngresos = """
+            // =====================================================
+            // 1. INGRESOS DE HOY
+            // =====================================================
+            String sqlIngresos = """
             SELECT COALESCE(SUM(total), 0)
             FROM venta
             WHERE fecha = ?
         """;
 
-        PreparedStatement ps1 =
-                con.prepareStatement(sqlIngresos);
+            PreparedStatement ps1
+                    = con.prepareStatement(sqlIngresos);
 
-        ps1.setDate(1, fechaHoy);
+            ps1.setDate(1, fechaHoy);
 
-        ResultSet rs1 =
-                ps1.executeQuery();
+            ResultSet rs1
+                    = ps1.executeQuery();
 
-        if (rs1.next()) {
+            if (rs1.next()) {
 
-            txtIngresos.setText(
-                String.format(
-                    "S/ %.2f",
-                    rs1.getDouble(1)
-                )
-            );
-        }
+                txtIngresos.setText(
+                        String.format(
+                                "S/ %.2f",
+                                rs1.getDouble(1)
+                        )
+                );
+            }
 
-
-        // =====================================================
-        // 2. CANTIDAD DE VENTAS DE HOY
-        // =====================================================
-
-        String sqlVentas = """
+            // =====================================================
+            // 2. CANTIDAD DE VENTAS DE HOY
+            // =====================================================
+            String sqlVentas = """
             SELECT COUNT(*)
             FROM venta
             WHERE fecha = ?
         """;
 
-        PreparedStatement ps2 =
-                con.prepareStatement(sqlVentas);
+            PreparedStatement ps2
+                    = con.prepareStatement(sqlVentas);
 
-        ps2.setDate(1, fechaHoy);
+            ps2.setDate(1, fechaHoy);
 
-        ResultSet rs2 =
-                ps2.executeQuery();
+            ResultSet rs2
+                    = ps2.executeQuery();
 
-        if (rs2.next()) {
+            if (rs2.next()) {
 
-            txtVentasHoy.setText(
-                String.valueOf(
-                    rs2.getInt(1)
-                )
-            );
-        }
+                txtVentasHoy.setText(
+                        String.valueOf(
+                                rs2.getInt(1)
+                        )
+                );
+            }
 
-
-        // =====================================================
-        // 3. STOCK TOTAL DE PRODUCTOS
-        // =====================================================
-
-        String sqlProductos = """
+            // =====================================================
+            // 3. STOCK TOTAL DE PRODUCTOS
+            // =====================================================
+            String sqlProductos = """
             SELECT COALESCE(
                 SUM(stock_inventario),
                 0
@@ -135,32 +126,30 @@ public void cargarDatosDashboard() {
             FROM producto
         """;
 
-        PreparedStatement ps3 =
-                con.prepareStatement(sqlProductos);
+            PreparedStatement ps3
+                    = con.prepareStatement(sqlProductos);
 
-        ResultSet rs3 =
-                ps3.executeQuery();
+            ResultSet rs3
+                    = ps3.executeQuery();
 
-        if (rs3.next()) {
+            if (rs3.next()) {
 
-            txtCantidadProductos.setText(
-                String.valueOf(
-                    rs3.getInt(1)
-                )
-            );
-        }
+                txtCantidadProductos.setText(
+                        String.valueOf(
+                                rs3.getInt(1)
+                        )
+                );
+            }
 
+            // =====================================================
+            // 4. VENTAS DE LA SEMANA ACTUAL
+            // =====================================================
+            int[] ventasSemana
+                    = new int[]{
+                        0, 0, 0, 0, 0, 0, 0
+                    };
 
-        // =====================================================
-        // 4. VENTAS DE LA SEMANA ACTUAL
-        // =====================================================
-
-        int[] ventasSemana =
-                new int[] {
-                    0, 0, 0, 0, 0, 0, 0
-                };
-
-        String sqlGrafico = """
+            String sqlGrafico = """
             SELECT
                 WEEKDAY(fecha) AS dia_semana,
                 COUNT(*) AS cantidad_ventas
@@ -170,121 +159,116 @@ public void cargarDatosDashboard() {
             ORDER BY WEEKDAY(fecha)
         """;
 
-        PreparedStatement ps4 =
-                con.prepareStatement(sqlGrafico);
+            PreparedStatement ps4
+                    = con.prepareStatement(sqlGrafico);
 
-        ps4.setDate(
-                1,
-                fechaLunes
-        );
+            ps4.setDate(
+                    1,
+                    fechaLunes
+            );
 
-        ps4.setDate(
-                2,
-                fechaDomingo
-        );
+            ps4.setDate(
+                    2,
+                    fechaDomingo
+            );
 
-        ResultSet rs4 =
-                ps4.executeQuery();
+            ResultSet rs4
+                    = ps4.executeQuery();
 
-        while (rs4.next()) {
+            while (rs4.next()) {
 
-            int indiceDia =
-                    rs4.getInt(
-                        "dia_semana"
-                    );
+                int indiceDia
+                        = rs4.getInt(
+                                "dia_semana"
+                        );
 
-            int cantidadVentas =
-                    rs4.getInt(
-                        "cantidad_ventas"
-                    );
+                int cantidadVentas
+                        = rs4.getInt(
+                                "cantidad_ventas"
+                        );
 
-            // 0 = Lunes
-            // 1 = Martes
-            // 2 = Miércoles
-            // 3 = Jueves
-            // 4 = Viernes
-            // 5 = Sábado
-            // 6 = Domingo
+                // 0 = Lunes
+                // 1 = Martes
+                // 2 = Miércoles
+                // 3 = Jueves
+                // 4 = Viernes
+                // 5 = Sábado
+                // 6 = Domingo
+                if (indiceDia >= 0
+                        && indiceDia < 7) {
 
-            if (indiceDia >= 0
-                    && indiceDia < 7) {
-
-                ventasSemana[indiceDia] =
-                        cantidadVentas;
+                    ventasSemana[indiceDia]
+                            = cantidadVentas;
+                }
             }
+
+            // =====================================================
+            // CERRAR CONSULTAS
+            // =====================================================
+            rs1.close();
+            ps1.close();
+
+            rs2.close();
+            ps2.close();
+
+            rs3.close();
+            ps3.close();
+
+            rs4.close();
+            ps4.close();
+
+            con.close();
+
+            // =====================================================
+            // 5. DIBUJAR GRÁFICO
+            // =====================================================
+            PanelGrafico.removeAll();
+
+            PanelGrafico.setLayout(
+                    new BorderLayout()
+            );
+
+            LienzoGrafico miGrafico
+                    = new LienzoGrafico(
+                            ventasSemana
+                    );
+
+            miGrafico.setPreferredSize(
+                    new java.awt.Dimension(
+                            PanelGrafico.getWidth(),
+                            350
+                    )
+            );
+
+            PanelGrafico.add(
+                    miGrafico,
+                    BorderLayout.CENTER
+            );
+
+            PanelGrafico.revalidate();
+            PanelGrafico.repaint();
+
+        } catch (Exception e) {
+
+            System.out.println(
+                    "Error al cargar Dashboard: "
+                    + e.getMessage()
+            );
+
+            e.printStackTrace();
         }
 
-
-        // =====================================================
-        // CERRAR CONSULTAS
-        // =====================================================
-
-        rs1.close();
-        ps1.close();
-
-        rs2.close();
-        ps2.close();
-
-        rs3.close();
-        ps3.close();
-
-        rs4.close();
-        ps4.close();
-
-        con.close();
-
-
-        // =====================================================
-        // 5. DIBUJAR GRÁFICO
-        // =====================================================
-
-        PanelGrafico.removeAll();
-
-        PanelGrafico.setLayout(
-            new BorderLayout()
-        );
-
-        LienzoGrafico miGrafico =
-                new LienzoGrafico(
-                    ventasSemana
-                );
-
-        miGrafico.setPreferredSize(
-            new java.awt.Dimension(
-                PanelGrafico.getWidth(),
-                350
-            )
-        );
-
-        PanelGrafico.add(
-            miGrafico,
-            BorderLayout.CENTER
-        );
-
-        PanelGrafico.revalidate();
-        PanelGrafico.repaint();
-
-
-    } catch (Exception e) {
-
-        System.out.println(
-            "Error al cargar Dashboard: "
-            + e.getMessage()
-        );
-
-        e.printStackTrace();
     }
-       
-    }
+
     private void actualizarFechaActual() {
         java.time.LocalDate fechaActual = java.time.LocalDate.now();
         java.time.format.DateTimeFormatter formato = java.time.format.DateTimeFormatter.ofPattern("d 'de' MMMM", new java.util.Locale("es", "ES"));
         String fechaTexto = fechaActual.format(formato);
         lblFecha.setText("📅 Hoy, " + fechaTexto);
     }
-    
- 
+
     class LienzoGrafico extends JPanel {
+
         private int[] ventasDiarias;
 
         public LienzoGrafico(int[] ventasDiarias) {
@@ -295,21 +279,21 @@ public void cargarDatosDashboard() {
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-            
+
             // Suavizado de bordes para que los textos y líneas se vean en alta calidad
             Graphics2D g2 = (Graphics2D) g;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
             int panelWidth = getWidth();
             int panelHeight = getHeight();
-            int margenIzquierdo = 40; 
-            int margenInferior = 30; 
+            int margenIzquierdo = 40;
+            int margenInferior = 30;
             int numBarras = ventasDiarias.length; // 7 días
 
             int anchoTotalBarra = (panelWidth - margenIzquierdo) / numBarras;
             int anchoBarra = anchoTotalBarra / 2;
 
-            Color colorBarra = new Color(0, 102, 153); 
+            Color colorBarra = new Color(0, 102, 153);
             Color colorTexto = Color.DARK_GRAY;
 
             // Dibujar Ejes
@@ -320,7 +304,9 @@ public void cargarDatosDashboard() {
             // Encontrar el valor máximo para escalar la altura de las barras
             int maxVentas = 1;
             for (int v : ventasDiarias) {
-                if (v > maxVentas) maxVentas = v;
+                if (v > maxVentas) {
+                    maxVentas = v;
+                }
             }
             int escalaY = maxVentas + 2;
 
@@ -351,6 +337,7 @@ public void cargarDatosDashboard() {
             }
         }
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -531,15 +518,15 @@ public void cargarDatosDashboard() {
                 .addContainerGap(29, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-  
+
     private void txtCantidadProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidadProductosActionPerformed
-      
-        
+
+
     }//GEN-LAST:event_txtCantidadProductosActionPerformed
 
     private void txtVentasHoyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtVentasHoyActionPerformed
-       
-        
+
+
     }//GEN-LAST:event_txtVentasHoyActionPerformed
 
     private void txtIngresosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIngresosActionPerformed

@@ -175,102 +175,94 @@ public class C_Productos_Nuevo_Producto extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
-       A_Dashboard dashboard =
-            (A_Dashboard)
-            javax.swing.SwingUtilities
-                    .getWindowAncestor(this);
+        A_Dashboard dashboard
+                = (A_Dashboard) javax.swing.SwingUtilities
+                        .getWindowAncestor(this);
 
-    if (dashboard != null) {
+        if (dashboard != null) {
 
-        dashboard.mostrarPanel(
-                new C_Productos()
-        );
-    }
+            dashboard.mostrarPanel(
+                    new C_Productos()
+            );
+        }
     }//GEN-LAST:event_btnAtrasActionPerformed
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-     // 1. Validar que los campos principales no estén vacíos
-    if (txtProducto.getText().trim().isEmpty() || 
-        txtTipoPrenda.getText().trim().isEmpty() || 
-        txtPrecio.getText().trim().isEmpty() || 
-        txtStock.getText().trim().isEmpty()) {
-        
-        javax.swing.JOptionPane.showMessageDialog(this, 
-            "Por favor, complete todos los campos (Producto, Tipo, Precio y Stock).", 
-            "Campos incompletos", 
-            javax.swing.JOptionPane.WARNING_MESSAGE);
-        return;
-    }
+        // 1. Validar que los campos principales no estén vacíos
+        if (txtProducto.getText().trim().isEmpty()
+                || txtTipoPrenda.getText().trim().isEmpty()
+                || txtPrecio.getText().trim().isEmpty()
+                || txtStock.getText().trim().isEmpty()) {
 
-    try {
-        // 2. Recolectar datos de los campos de texto
-        String producto = txtProducto.getText().trim();
-        String tipoPrenda = txtTipoPrenda.getText().trim();
-        String descripcion = txtDescripcion.getText().trim();
-        
-        // Unificar Producto y Descripción para que encaje en la columna de tu BD
-        String descFinal = producto + " - " + descripcion; 
-        
-        // Convertir textos a números
-        double precio = Double.parseDouble(txtPrecio.getText().trim());
-        int stock = Integer.parseInt(txtStock.getText().trim());
-
-        // 3. Conectar a BD y preparar la consulta INSERT
-        // Omitimos id_producto (es autoincrementable) e id_proveedor (queda NULL por ahora)
-        java.sql.Connection con = conexionLiv.conectar();
-        String sql = "INSERT INTO producto (tipo_prenda, descripcion, precio, stock_inventario) VALUES (?, ?, ?, ?)";
-        
-        java.sql.PreparedStatement ps = con.prepareStatement(sql);
-        ps.setString(1, tipoPrenda);
-        ps.setString(2, descFinal);
-        ps.setDouble(3, precio);
-        ps.setInt(4, stock);
-        
-        // 4. Ejecutar la inserción
-        int resultado = ps.executeUpdate();
-        
-        if (resultado > 0) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Producto agregado exitosamente.");
-            A_Dashboard dashboard =
-        (A_Dashboard)
-        javax.swing.SwingUtilities
-                .getWindowAncestor(this);
-
-if (dashboard != null) {
-
-    dashboard.mostrarPanel(
-            new C_Productos()
-    );
-}
-            
-            // 5. Limpiar las cajas de texto para un nuevo ingreso
-            txtProducto.setText("");
-            txtTipoPrenda.setText("");
-            txtDescripcion.setText("");
-            txtPrecio.setText("");
-            txtStock.setText("");
-            
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(this, 
-                "No se pudo agregar el producto.", 
-                "Error", 
-                javax.swing.JOptionPane.ERROR_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Por favor, complete todos los campos (Producto, Tipo, Precio y Stock).",
+                    "Campos incompletos",
+                    javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
         }
-        
-        ps.close();
-        con.close();
-        
-    } catch (NumberFormatException e) {
-        javax.swing.JOptionPane.showMessageDialog(this, 
-            "El precio y el stock deben ser valores numéricos válidos (Ej. Precio: 45.50).", 
-            "Error de formato", 
-            javax.swing.JOptionPane.ERROR_MESSAGE);
-    } catch (Exception e) {
-        javax.swing.JOptionPane.showMessageDialog(this, 
-            "Error al guardar en la base de datos: " + e.getMessage(), 
-            "Error BD", 
-            javax.swing.JOptionPane.ERROR_MESSAGE);
-    }
+
+        try {
+            // 2. Recolectar datos de los campos de texto
+            String producto = txtProducto.getText().trim();
+            String tipoPrenda = txtTipoPrenda.getText().trim();
+            String descripcion = txtDescripcion.getText().trim();
+
+            String descFinal = producto + " - " + descripcion;
+
+            double precio = Double.parseDouble(txtPrecio.getText().trim());
+            int stock = Integer.parseInt(txtStock.getText().trim());
+
+            java.sql.Connection con = conexionLiv.conectar();
+            String sql = "INSERT INTO producto (tipo_prenda, descripcion, precio, stock_inventario) VALUES (?, ?, ?, ?)";
+
+            java.sql.PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, tipoPrenda);
+            ps.setString(2, descFinal);
+            ps.setDouble(3, precio);
+            ps.setInt(4, stock);
+
+            int resultado = ps.executeUpdate();
+
+            if (resultado > 0) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Producto agregado exitosamente.");
+                A_Dashboard dashboard
+                        = (A_Dashboard) javax.swing.SwingUtilities
+                                .getWindowAncestor(this);
+
+                if (dashboard != null) {
+
+                    dashboard.mostrarPanel(
+                            new C_Productos()
+                    );
+                }
+
+                txtProducto.setText("");
+                txtTipoPrenda.setText("");
+                txtDescripcion.setText("");
+                txtPrecio.setText("");
+                txtStock.setText("");
+
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this,
+                        "No se pudo agregar el producto.",
+                        "Error",
+                        javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
+
+            ps.close();
+            con.close();
+
+        } catch (NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "El precio y el stock deben ser valores numéricos válidos (Ej. Precio: 45.50).",
+                    "Error de formato",
+                    javax.swing.JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Error al guardar en la base de datos: " + e.getMessage(),
+                    "Error BD",
+                    javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
 

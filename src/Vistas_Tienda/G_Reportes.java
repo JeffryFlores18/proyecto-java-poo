@@ -9,136 +9,132 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.table.DefaultTableModel;
 
-
 public class G_Reportes extends javax.swing.JPanel {
 
-    
     public G_Reportes() {
         initComponents();
-       
-        
+
     }
-    
-    public  void generarReporteVentas(){
-        if(dcfechaDesde.getDate() == null || dcfechaHasta.getDate()==null){
-             JOptionPane.showMessageDialog( this,"Seleccione ambas fechas.","Fechas incompletas",JOptionPane.WARNING_MESSAGE);
-          return;
+
+    public void generarReporteVentas() {
+        if (dcfechaDesde.getDate() == null || dcfechaHasta.getDate() == null) {
+            JOptionPane.showMessageDialog(this, "Seleccione ambas fechas.", "Fechas incompletas", JOptionPane.WARNING_MESSAGE);
+            return;
         }
-        
+
         java.sql.Date fechaDesde = new java.sql.Date(dcfechaDesde.getDate().getTime());
         java.sql.Date fechaHasta = new java.sql.Date(dcfechaHasta.getDate().getTime());
-        
+
         if (fechaDesde.after(fechaHasta)) {
-            JOptionPane.showMessageDialog(this,"La fecha inicial no puede ser mayor que la fecha final.","Rango de fechas inválido",JOptionPane.WARNING_MESSAGE);
-          return;
+            JOptionPane.showMessageDialog(this, "La fecha inicial no puede ser mayor que la fecha final.", "Rango de fechas inválido", JOptionPane.WARNING_MESSAGE);
+            return;
         }
-        
+
         cargarResumenVentas(fechaDesde, fechaHasta);
         cargarHistorialVentas(fechaDesde, fechaHasta);
     }
-    
-    private void cargarResumenVentas( java.sql.Date fechaDesde, java.sql.Date fechaHasta) {
 
-    String sql =
-            "SELECT "
-            + "COALESCE(SUM(total), 0) AS ingresos, "
-            + "COUNT(*) AS cantidad_ventas, "
-            + "COUNT(DISTINCT id_cliente) AS clientes, "
-            + "COALESCE(AVG(total), 0) AS promedio "
-            + "FROM venta "
-            + "WHERE fecha BETWEEN ? AND ?";
+    private void cargarResumenVentas(java.sql.Date fechaDesde, java.sql.Date fechaHasta) {
 
-    try {
+        String sql
+                = "SELECT "
+                + "COALESCE(SUM(total), 0) AS ingresos, "
+                + "COUNT(*) AS cantidad_ventas, "
+                + "COUNT(DISTINCT id_cliente) AS clientes, "
+                + "COALESCE(AVG(total), 0) AS promedio "
+                + "FROM venta "
+                + "WHERE fecha BETWEEN ? AND ?";
 
-        Connection con = conexionLiv.conectar();
+        try {
 
-        PreparedStatement ps = con.prepareStatement(sql);
-        ps.setDate(1, fechaDesde);
-        ps.setDate(2, fechaHasta);
+            Connection con = conexionLiv.conectar();
 
-        ResultSet rs = ps.executeQuery();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setDate(1, fechaDesde);
+            ps.setDate(2, fechaHasta);
 
-        if (rs.next()) {
-            lblingresosTotales.setText(String.format("S/ %.2f",rs.getDouble("ingresos")) );
-            lblnumeroVentas.setText(String.valueOf(rs.getInt("cantidad_ventas")));
-            lblclientesAten.setText( String.valueOf(rs.getInt("clientes") ));
-            lblpromedioVenta.setText(String.format( "S/ %.2f",rs.getDouble("promedio")));
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                lblingresosTotales.setText(String.format("S/ %.2f", rs.getDouble("ingresos")));
+                lblnumeroVentas.setText(String.valueOf(rs.getInt("cantidad_ventas")));
+                lblclientesAten.setText(String.valueOf(rs.getInt("clientes")));
+                lblpromedioVenta.setText(String.format("S/ %.2f", rs.getDouble("promedio")));
+            }
+
+            rs.close();
+            ps.close();
+            con.close();
+
+        } catch (Exception e) {
+
+            JOptionPane.showMessageDialog(this, "Error al generar el reporte: " + e.getMessage());
         }
-
-        rs.close();
-        ps.close();
-        con.close();
-
-    } catch (Exception e) {
-
-        JOptionPane.showMessageDialog(this,"Error al generar el reporte: "+ e.getMessage());
     }
-}
-    
-    private void cargarHistorialVentas( java.sql.Date fechaDesde,java.sql.Date fechaHasta) {
 
-        DefaultTableModel modelo =(DefaultTableModel)tblhistorial.getModel();
+    private void cargarHistorialVentas(java.sql.Date fechaDesde, java.sql.Date fechaHasta) {
+
+        DefaultTableModel modelo = (DefaultTableModel) tblhistorial.getModel();
         modelo.setRowCount(0);
 
-        String sql =
-            "SELECT "
-            + "v.id_venta, "
-            + "v.fecha, "
-            + "v.hora, "
-            + "COALESCE(c.nombre, 'Cliente general') AS cliente, "
-            + "COALESCE(c.dni, '-') AS dni, "
-            + "v.total "
-            + "FROM venta v LEFT JOIN cliente c ON v.id_cliente = c.id_cliente "
-            + "WHERE v.fecha BETWEEN ? AND ? "
-            + "ORDER BY v.fecha, v.hora";
+        String sql
+                = "SELECT "
+                + "v.id_venta, "
+                + "v.fecha, "
+                + "v.hora, "
+                + "COALESCE(c.nombre, 'Cliente general') AS cliente, "
+                + "COALESCE(c.dni, '-') AS dni, "
+                + "v.total "
+                + "FROM venta v LEFT JOIN cliente c ON v.id_cliente = c.id_cliente "
+                + "WHERE v.fecha BETWEEN ? AND ? "
+                + "ORDER BY v.fecha, v.hora";
 
-    try {
+        try {
 
-        Connection con = conexionLiv.conectar();
-        PreparedStatement ps =con.prepareStatement(sql);
-        ps.setDate(1, fechaDesde);
-        ps.setDate(2, fechaHasta);
-        ResultSet rs = ps.executeQuery();
+            Connection con = conexionLiv.conectar();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setDate(1, fechaDesde);
+            ps.setDate(2, fechaHasta);
+            ResultSet rs = ps.executeQuery();
 
-        while (rs.next()) {
+            while (rs.next()) {
 
-            Object[] fila = {
-                rs.getInt("id_venta"),
-                rs.getDate("fecha"),
-                rs.getTime("hora"),
-                rs.getString("cliente"),
-                rs.getString("dni"),
-                String.format( "S/ %.2f", rs.getDouble("total")
-                )
-            };
+                Object[] fila = {
+                    rs.getInt("id_venta"),
+                    rs.getDate("fecha"),
+                    rs.getTime("hora"),
+                    rs.getString("cliente"),
+                    rs.getString("dni"),
+                    String.format("S/ %.2f", rs.getDouble("total")
+                    )
+                };
 
-            modelo.addRow(fila);
+                modelo.addRow(fila);
+            }
+
+            rs.close();
+            ps.close();
+            con.close();
+
+        } catch (Exception e) {
+
+            JOptionPane.showMessageDialog(this, "Error al cargar historial: " + e.getMessage()
+            );
         }
-
-        rs.close();
-        ps.close();
-        con.close();
-
-    } catch (Exception e) {
-
-        JOptionPane.showMessageDialog( this, "Error al cargar historial: " + e.getMessage()
-        );
     }
-}
-    
-    public void fecha(){
+
+    public void fecha() {
         // Establecer la fecha "Desde" en 01/09/2026
         java.util.Calendar calDesde = java.util.Calendar.getInstance();
         calDesde.set(2026, java.util.Calendar.SEPTEMBER, 1);
         dcfechaHasta.setDate(calDesde.getTime());
 
-       // Establecer la fecha "Hasta" en 20/09/2026 (según lo que tenías en tus apuntes)
+        // Establecer la fecha "Hasta" en 20/09/2026 (según lo que tenías en tus apuntes)
         java.util.Calendar calHasta = java.util.Calendar.getInstance();
         calHasta.set(2026, java.util.Calendar.SEPTEMBER, 20);
         dcfechaHasta.setDate(calHasta.getTime());
     }
 
-  
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -551,7 +547,7 @@ public class G_Reportes extends javax.swing.JPanel {
     }//GEN-LAST:event_btngenerarMouseExited
 
     private void btngenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btngenerarActionPerformed
-           generarReporteVentas();
+        generarReporteVentas();
     }//GEN-LAST:event_btngenerarActionPerformed
 
     private void btnIngresosMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnIngresosMouseEntered

@@ -8,7 +8,6 @@ import java.awt.Color;
 import java.util.Date;
 import javax.swing.JOptionPane;
 
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JDialog;
@@ -18,55 +17,54 @@ import javax.swing.table.DefaultTableModel;
 
 public class E_Ventas extends javax.swing.JPanel {
 
-   private boolean modoEditar = false;
+    private boolean modoEditar = false;
 
-public E_Ventas() {
+    public E_Ventas() {
         initComponents();
 
-    configurarTabla();
+        configurarTabla();
 
-    DefaultTableModel modelo =
-            (DefaultTableModel) btnContenido.getModel();
+        DefaultTableModel modelo
+                = (DefaultTableModel) btnContenido.getModel();
 
-    modelo.setRowCount(0);
+        modelo.setRowCount(0);
 
-    txtTotal.setText("0.00");
-}
-private int obtenerOCrearCliente(Connection con) throws SQLException {
+        txtTotal.setText("0.00");
+    }
 
-    String dni =
-            txtDni.getText().trim();
+    private int obtenerOCrearCliente(Connection con) throws SQLException {
 
-    String nombre =
-            txtNombre.getText().trim();
+        String dni
+                = txtDni.getText().trim();
 
-    String telefono =
-            txtTelefono.getText().trim();
+        String nombre
+                = txtNombre.getText().trim();
 
-    // Primero buscar cliente por DNI
-    String sqlBuscar = """
+        String telefono
+                = txtTelefono.getText().trim();
+
+        String sqlBuscar = """
         SELECT id_cliente
         FROM cliente
         WHERE dni = ?
     """;
 
-    try (
-        PreparedStatement ps =
-                con.prepareStatement(sqlBuscar)
-    ) {
+        try (
+                PreparedStatement ps
+                = con.prepareStatement(sqlBuscar)) {
 
-        ps.setString(1, dni);
+            ps.setString(1, dni);
 
-        try (ResultSet rs = ps.executeQuery()) {
+            try (ResultSet rs = ps.executeQuery()) {
 
-            if (rs.next()) {
-                return rs.getInt("id_cliente");
+                if (rs.next()) {
+                    return rs.getInt("id_cliente");
+                }
             }
         }
-    }
 
-    // Si no existe, crear cliente
-    String sqlInsertar = """
+        // Si no existe, crear cliente
+        String sqlInsertar = """
         INSERT INTO cliente
         (
             dni,
@@ -76,57 +74,54 @@ private int obtenerOCrearCliente(Connection con) throws SQLException {
         VALUES (?, ?, ?)
     """;
 
-    try (
-        PreparedStatement ps =
-                con.prepareStatement(
+        try (
+                PreparedStatement ps
+                = con.prepareStatement(
                         sqlInsertar,
                         java.sql.Statement.RETURN_GENERATED_KEYS
-                )
-    ) {
+                )) {
 
-        ps.setString(1, dni);
-        ps.setString(2, nombre);
-        ps.setString(3, telefono);
+                    ps.setString(1, dni);
+                    ps.setString(2, nombre);
+                    ps.setString(3, telefono);
 
-        ps.executeUpdate();
+                    ps.executeUpdate();
 
-        try (ResultSet claves = ps.getGeneratedKeys()) {
+                    try (ResultSet claves = ps.getGeneratedKeys()) {
 
-            if (claves.next()) {
-                return claves.getInt(1);
-            }
-        }
+                        if (claves.next()) {
+                            return claves.getInt(1);
+                        }
+                    }
+                }
+
+                throw new SQLException(
+                        "No se pudo obtener el cliente."
+                );
+
     }
 
-    throw new SQLException(
-            "No se pudo obtener el cliente."
-    );
-    
-}
-private void realizarVenta() {
+    private void realizarVenta() {
 
-    double total =
-            Double.parseDouble(
-                    txtTotal.getText()
-            );
+        double total
+                = Double.parseDouble(
+                        txtTotal.getText()
+                );
 
-    // Temporalmente usuario 1.
-    // Después podemos obtenerlo del Login.
-    int idUsuario = 1;
+        int idUsuario = 1;
 
-    Connection con = null;
+        Connection con = null;
 
-    try {
+        try {
 
-        con = conexionLiv.conectar();
+            con = conexionLiv.conectar();
 
-        con.setAutoCommit(false);
+            con.setAutoCommit(false);
 
-        // Buscar o crear automáticamente al cliente
-        int idCliente =
-                obtenerOCrearCliente(con);
+            int idCliente
+                    = obtenerOCrearCliente(con);
 
-        String sqlVenta = """
+            String sqlVenta = """
             INSERT INTO venta
             (
                 id_cliente,
@@ -145,106 +140,107 @@ private void realizarVenta() {
             )
         """;
 
-        PreparedStatement psVenta =
-                con.prepareStatement(
-                        sqlVenta,
-                        java.sql.Statement.RETURN_GENERATED_KEYS
+            PreparedStatement psVenta
+                    = con.prepareStatement(
+                            sqlVenta,
+                            java.sql.Statement.RETURN_GENERATED_KEYS
+                    );
+
+            psVenta.setInt(
+                    1,
+                    idCliente
+            );
+
+            psVenta.setInt(
+                    2,
+                    idUsuario
+            );
+
+            psVenta.setDouble(
+                    3,
+                    total
+            );
+
+            psVenta.executeUpdate();
+
+            ResultSet claves
+                    = psVenta.getGeneratedKeys();
+
+            if (!claves.next()) {
+
+                con.rollback();
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "No se pudo registrar la venta."
                 );
 
-        psVenta.setInt(
-                1,
-                idCliente
-        );
+                return;
+            }
 
-        psVenta.setInt(
-                2,
-                idUsuario
-        );
+            int idVenta
+                    = claves.getInt(1);
 
-        psVenta.setDouble(
-                3,
-                total
-        );
+            guardarDetalles(
+                    con,
+                    idVenta
+            );
 
-        psVenta.executeUpdate();
-
-        ResultSet claves =
-                psVenta.getGeneratedKeys();
-
-        if (!claves.next()) {
-
-            con.rollback();
+            con.commit();
 
             JOptionPane.showMessageDialog(
                     this,
-                    "No se pudo registrar la venta."
+                    "Venta registrada correctamente.\n"
+                    + "Venta N°: "
+                    + idVenta
+                    + "\nTotal: S/ "
+                    + String.format("%.2f", total)
             );
 
-            return;
-        }
-
-        int idVenta =
-                claves.getInt(1);
-
-        guardarDetalles(
-                con,
-                idVenta
-        );
-
-        con.commit();
-
-        JOptionPane.showMessageDialog(
-                this,
-                "Venta registrada correctamente.\n"
-                + "Venta N°: "
-                + idVenta
-                + "\nTotal: S/ "
-                + String.format("%.2f", total)
-        );
-
-        limpiarVenta();
-
-    } catch (SQLException e) {
-
-        try {
-
-            if (con != null) {
-                con.rollback();
-            }
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-
-        JOptionPane.showMessageDialog(
-                this,
-                "Error al realizar la venta:\n"
-                + e.getMessage()
-        );
-
-    } finally {
-
-        try {
-
-            if (con != null) {
-                con.setAutoCommit(true);
-                con.close();
-            }
+            limpiarVenta();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+
+            try {
+
+                if (con != null) {
+                    con.rollback();
+                }
+
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Error al realizar la venta:\n"
+                    + e.getMessage()
+            );
+
+        } finally {
+
+            try {
+
+                if (con != null) {
+                    con.setAutoCommit(true);
+                    con.close();
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
-}
-private void guardarDetalles(
-        Connection con,
-        int idVenta)
-        throws SQLException {
 
-    DefaultTableModel modelo =
-            (DefaultTableModel) btnContenido.getModel();
+    private void guardarDetalles(
+            Connection con,
+            int idVenta)
+            throws SQLException {
 
-    String sql = """
+        DefaultTableModel modelo
+                = (DefaultTableModel) btnContenido.getModel();
+
+        String sql = """
         INSERT INTO detalle_venta
         (
             id_venta,
@@ -256,112 +252,114 @@ private void guardarDetalles(
         VALUES (?, ?, ?, ?, ?)
     """;
 
-    try (
-        PreparedStatement ps =
-                con.prepareStatement(sql)
-    ) {
+        try (
+                PreparedStatement ps
+                = con.prepareStatement(sql)) {
 
-        for (int i = 0;
-                i < modelo.getRowCount();
-                i++) {
+            for (int i = 0;
+                    i < modelo.getRowCount();
+                    i++) {
 
-            int idProducto =
-                    Integer.parseInt(
-                            modelo
-                                    .getValueAt(i, 0)
-                                    .toString()
-                    );
+                int idProducto
+                        = Integer.parseInt(
+                                modelo
+                                        .getValueAt(i, 0)
+                                        .toString()
+                        );
 
-            int cantidad =
-                    Integer.parseInt(
-                            modelo
-                                    .getValueAt(i, 4)
-                                    .toString()
-                    );
+                int cantidad
+                        = Integer.parseInt(
+                                modelo
+                                        .getValueAt(i, 4)
+                                        .toString()
+                        );
 
-            double precio =
-                    Double.parseDouble(
-                            modelo
-                                    .getValueAt(i, 5)
-                                    .toString()
-                    );
+                double precio
+                        = Double.parseDouble(
+                                modelo
+                                        .getValueAt(i, 5)
+                                        .toString()
+                        );
 
-            double subtotal =
-                    Double.parseDouble(
-                            modelo
-                                    .getValueAt(i, 6)
-                                    .toString()
-                    );
+                double subtotal
+                        = Double.parseDouble(
+                                modelo
+                                        .getValueAt(i, 6)
+                                        .toString()
+                        );
 
-            ps.setInt(
-                    1,
-                    idVenta
-            );
+                ps.setInt(
+                        1,
+                        idVenta
+                );
 
-            ps.setInt(
-                    2,
-                    idProducto
-            );
+                ps.setInt(
+                        2,
+                        idProducto
+                );
 
-            ps.setInt(
-                    3,
-                    cantidad
-            );
+                ps.setInt(
+                        3,
+                        cantidad
+                );
 
-            ps.setDouble(
-                    4,
-                    precio
-            );
+                ps.setDouble(
+                        4,
+                        precio
+                );
 
-            ps.setDouble(
-                    5,
-                    subtotal
-            );
+                ps.setDouble(
+                        5,
+                        subtotal
+                );
 
-            ps.addBatch();
-        }
+                ps.addBatch();
+            }
 
-        ps.executeBatch();
-    }
-}
-private void limpiarVenta() {
-
-    DefaultTableModel modelo =
-            (DefaultTableModel) btnContenido.getModel();
-
-    modelo.setRowCount(0);
-
-    txtDni.setText("");
-    txtNombre.setText("");
-    txtTelefono.setText("");
-
-    txtTotal.setText("0.00");
-
-    modoEditar = false;
-}
-private void calcularTotal() {
-
-    DefaultTableModel modelo =
-            (DefaultTableModel) btnContenido.getModel();
-
-    double total = 0;
-
-    for (int i = 0; i < modelo.getRowCount(); i++) {
-
-        Object valor = modelo.getValueAt(i, 6);
-
-        if (valor != null) {
-
-            total += Double.parseDouble(
-                    valor.toString()
-            );
+            ps.executeBatch();
         }
     }
 
-    txtTotal.setText(
-            String.format("%.2f", total)
-    );
-}
+    private void limpiarVenta() {
+
+        DefaultTableModel modelo
+                = (DefaultTableModel) btnContenido.getModel();
+
+        modelo.setRowCount(0);
+
+        txtDni.setText("");
+        txtNombre.setText("");
+        txtTelefono.setText("");
+
+        txtTotal.setText("0.00");
+
+        modoEditar = false;
+    }
+
+    private void calcularTotal() {
+
+        DefaultTableModel modelo
+                = (DefaultTableModel) btnContenido.getModel();
+
+        double total = 0;
+
+        for (int i = 0; i < modelo.getRowCount(); i++) {
+
+            Object valor = modelo.getValueAt(i, 6);
+
+            if (valor != null) {
+
+                total += Double.parseDouble(
+                        valor.toString()
+                );
+            }
+        }
+
+        txtTotal.setText(
+                String.format("%.2f", total)
+        );
+    }
+
     private void configurarTabla() {
 
         DefaultTableModel modelo = new DefaultTableModel(
@@ -379,9 +377,6 @@ private void calcularTotal() {
 
             @Override
             public boolean isCellEditable(int row, int column) {
-
-                // Solo cantidad puede modificarse
-                // y solo después de presionar Editar
                 return modoEditar && column == 4;
             }
         };
@@ -402,11 +397,11 @@ private void calcularTotal() {
 
                 try {
 
-                    Object valorCantidad =
-                            modelo.getValueAt(fila, 4);
+                    Object valorCantidad
+                            = modelo.getValueAt(fila, 4);
 
-                    Object valorPrecio =
-                            modelo.getValueAt(fila, 5);
+                    Object valorPrecio
+                            = modelo.getValueAt(fila, 5);
 
                     if (valorCantidad == null
                             || valorPrecio == null) {
@@ -433,8 +428,8 @@ private void calcularTotal() {
                         return;
                     }
 
-                    double subtotal =
-                            cantidad * precio;
+                    double subtotal
+                            = cantidad * precio;
 
                     modelo.setValueAt(
                             subtotal,
@@ -456,61 +451,63 @@ private void calcularTotal() {
     }
 
     public void agregarProducto(
-        int idProducto,
-        String tipoPrenda,
-        String descripcion,
-        double precio) {
+            int idProducto,
+            String tipoPrenda,
+            String descripcion,
+            double precio) {
 
-    DefaultTableModel modelo =
-            (DefaultTableModel) btnContenido.getModel();
+        DefaultTableModel modelo
+                = (DefaultTableModel) btnContenido.getModel();
 
-    for (int i = 0; i < modelo.getRowCount(); i++) {
+        for (int i = 0; i < modelo.getRowCount(); i++) {
 
-        int idExistente =
-                Integer.parseInt(
-                        modelo.getValueAt(i, 0).toString()
-                );
-
-        if (idExistente == idProducto) {
-
-            int cantidadActual =
-                    Integer.parseInt(
-                            modelo.getValueAt(i, 4).toString()
+            int idExistente
+                    = Integer.parseInt(
+                            modelo.getValueAt(i, 0).toString()
                     );
 
-            int nuevaCantidad =
-                    cantidadActual + 1;
+            if (idExistente == idProducto) {
 
-            modelo.setValueAt(
-                    nuevaCantidad,
-                    i,
-                    4
-            );
+                int cantidadActual
+                        = Integer.parseInt(
+                                modelo.getValueAt(i, 4).toString()
+                        );
 
-            modelo.setValueAt(
-                    nuevaCantidad * precio,
-                    i,
-                    6
-            );
+                int nuevaCantidad
+                        = cantidadActual + 1;
 
-            calcularTotal();
+                modelo.setValueAt(
+                        nuevaCantidad,
+                        i,
+                        4
+                );
 
-            return;
+                modelo.setValueAt(
+                        nuevaCantidad * precio,
+                        i,
+                        6
+                );
+
+                calcularTotal();
+
+                return;
+            }
         }
+
+        modelo.addRow(new Object[]{
+            idProducto,
+            tipoPrenda,
+            descripcion,
+            tipoPrenda,
+            1,
+            precio,
+            precio
+        });
+
+        calcularTotal();
     }
 
-    modelo.addRow(new Object[]{
-        idProducto,
-        tipoPrenda,
-        descripcion,
-        tipoPrenda,
-        1,
-        precio,
-        precio
-    });
-
-    calcularTotal();
-}    @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -713,15 +710,15 @@ private void calcularTotal() {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-    JDialog ventana =
-                new JDialog(
+        JDialog ventana
+                = new JDialog(
                         SwingUtilities.getWindowAncestor(this),
                         "Agregar producto",
                         java.awt.Dialog.ModalityType.APPLICATION_MODAL
                 );
 
-        E_Ventas_Agregar panel =
-                new E_Ventas_Agregar(
+        E_Ventas_Agregar panel
+                = new E_Ventas_Agregar(
                         this,
                         ventana
                 );
@@ -736,8 +733,8 @@ private void calcularTotal() {
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-       int fila =
-                btnContenido.getSelectedRow();
+        int fila
+                = btnContenido.getSelectedRow();
 
         if (fila == -1) {
 
@@ -765,7 +762,7 @@ private void calcularTotal() {
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-    
+
         if (btnContenido.isEditing()) {
 
             btnContenido
@@ -784,103 +781,103 @@ private void calcularTotal() {
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVentaActionPerformed
-         String dni =
-            txtDni.getText().trim();
+        String dni
+                = txtDni.getText().trim();
 
-    String nombre =
-            txtNombre.getText().trim();
+        String nombre
+                = txtNombre.getText().trim();
 
-    String telefono =
-            txtTelefono.getText().trim();
+        String telefono
+                = txtTelefono.getText().trim();
 
-    DefaultTableModel modelo =
-            (DefaultTableModel) btnContenido.getModel();
+        DefaultTableModel modelo
+                = (DefaultTableModel) btnContenido.getModel();
 
-    if (dni.isEmpty()
-            || nombre.isEmpty()
-            || telefono.isEmpty()
-            || dni.length()!=8) {
+        if (dni.isEmpty()
+                || nombre.isEmpty()
+                || telefono.isEmpty()
+                || dni.length() != 8) {
 
-        JOptionPane.showMessageDialog(
-                this,
-                "Complete los datos del cliente."
-        );
-
-        return;
-    }
-
-    if (modelo.getRowCount() == 0) {
-
-        JOptionPane.showMessageDialog(
-                this,
-                "Debe agregar al menos un producto."
-        );
-
-        return;
-    }
-
-    double total =
-            Double.parseDouble(
-                    txtTotal.getText()
-            );
-
-    int respuesta =
-            JOptionPane.showConfirmDialog(
+            JOptionPane.showMessageDialog(
                     this,
-                    "Total: S/ "
-                    + String.format("%.2f", total)
-                    + "\n\n¿Desea realizar la venta?",
-                    "Confirmar venta",
-                    JOptionPane.YES_NO_OPTION
+                    "Complete los datos del cliente."
             );
 
-    if (respuesta != JOptionPane.YES_OPTION) {
-        return;
-    }
+            return;
+        }
 
-    realizarVenta();            // TODO add your handling code here:
+        if (modelo.getRowCount() == 0) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Debe agregar al menos un producto."
+            );
+
+            return;
+        }
+
+        double total
+                = Double.parseDouble(
+                        txtTotal.getText()
+                );
+
+        int respuesta
+                = JOptionPane.showConfirmDialog(
+                        this,
+                        "Total: S/ "
+                        + String.format("%.2f", total)
+                        + "\n\n¿Desea realizar la venta?",
+                        "Confirmar venta",
+                        JOptionPane.YES_NO_OPTION
+                );
+
+        if (respuesta != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        realizarVenta();            // TODO add your handling code here:
     }//GEN-LAST:event_btnVentaActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    int fila = btnContenido.getSelectedRow();
+        int fila = btnContenido.getSelectedRow();
 
-    if (fila == -1) {
-        JOptionPane.showMessageDialog(
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Seleccione un producto de la venta.",
+                    "Aviso",
+                    JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
+
+        String producto = btnContenido
+                .getValueAt(fila, 1)
+                .toString();
+
+        int respuesta = JOptionPane.showConfirmDialog(
                 this,
-                "Seleccione un producto de la venta.",
-                "Aviso",
-                JOptionPane.WARNING_MESSAGE
+                "¿Seguro que desea quitar este producto de la venta?\n\n"
+                + "Producto: " + producto,
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
         );
-        return;
-    }
 
-    String producto = btnContenido
-            .getValueAt(fila, 1)
-            .toString();
+        if (respuesta == JOptionPane.YES_OPTION) {
 
-    int respuesta = JOptionPane.showConfirmDialog(
-            this,
-            "¿Seguro que desea quitar este producto de la venta?\n\n"
-            + "Producto: " + producto,
-            "Confirmar eliminación",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE
-    );
+            DefaultTableModel modelo
+                    = (DefaultTableModel) btnContenido.getModel();
 
-    if (respuesta == JOptionPane.YES_OPTION) {
+            modelo.removeRow(fila);
 
-        DefaultTableModel modelo =
-                (DefaultTableModel) btnContenido.getModel();
+            calcularTotal();
 
-        modelo.removeRow(fila);
-
-        calcularTotal();
-
-        JOptionPane.showMessageDialog(
-                this,
-                "Producto eliminado de la venta."
-        );
-    }            // TODO add your handling code here:
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Producto eliminado de la venta."
+            );
+        }            // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void txtDniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDniActionPerformed

@@ -1,4 +1,3 @@
-
 package Vistas_Tienda;
 
 import java.awt.Color;
@@ -7,23 +6,18 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
-
 public class D_FromCliente extends javax.swing.JFrame {
-
 
     private D_Clientesp ventanaClientes;
     private int idclienteEditar = 0;
-    
- 
-    
-    
+
     public D_FromCliente() {
         initComponents();
-        
+
         prepararRegistro();
         setLocationRelativeTo(null);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
- 
+
     }
 
     public D_FromCliente(D_Clientesp ventanaClientes) {
@@ -32,42 +26,38 @@ public class D_FromCliente extends javax.swing.JFrame {
         setLocationRelativeTo(ventanaClientes);
     }
 
-    public D_FromCliente(D_Clientesp ventanaClientes, D_clientees cliente,String titulo) {
+    public D_FromCliente(D_Clientesp ventanaClientes, D_clientees cliente, String titulo) {
         this(ventanaClientes);
         idclienteEditar = cliente.getIDcliente();
         txtidCliente.setText(String.valueOf(cliente.getIDcliente()));
         txtdni.setText(cliente.getDni());
         txtnombre.setText(cliente.getNombre());
         txttelefono.setText(cliente.getTelefono());
-        if(titulo.equals("Editar")){
+        if (titulo.equals("Editar")) {
             lbltituloFormulario.setText("Editar Cliente");
         }
         btnguardar.setText("Guardar cambios");
     }
-    
-    
-    
-    
-    private void prepararRegistro(){
+
+    private void prepararRegistro() {
         txtidCliente.setText("Automatico");
         txtidCliente.setEditable(false);
-        
+
         txtdni.setText("");
         txtnombre.setText("");
         txttelefono.setText("");
 
         btnguardar.setText("Confirmar");
     }
-    
-    
-    private boolean validarDatos(){
+
+    private boolean validarDatos() {
         String dni = txtdni.getText().trim();
         String nombre = txtnombre.getText().trim();
         String telefono = txttelefono.getText().trim();
-        
-        if (dni.isEmpty() ||nombre.isEmpty() || telefono.isEmpty()) {
-           JOptionPane.showMessageDialog( this,"Complete todos los campos." );
-           return false;
+
+        if (dni.isEmpty() || nombre.isEmpty() || telefono.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Complete todos los campos.");
+            return false;
         }
         if (!dni.matches("[0-9]{8}")) {
             JOptionPane.showMessageDialog(this, "El DNI debe contener 8 dígitos.");
@@ -75,7 +65,7 @@ public class D_FromCliente extends javax.swing.JFrame {
             return false;
         }
         if (nombre.equals("")) {
-            JOptionPane.showMessageDialog(this,"Ingrese nombre.");
+            JOptionPane.showMessageDialog(this, "Ingrese nombre.");
             txtnombre.requestFocusInWindow();
             return false;
         }
@@ -84,10 +74,9 @@ public class D_FromCliente extends javax.swing.JFrame {
             txttelefono.requestFocusInWindow();
             return false;
         }
-       return true;
+        return true;
     }
-    
-    //Este método actualizará la tabla y cerrará el formulario. También servirá al editar
+
     private void finalizarGuardado(String mensaje) {
 
         JOptionPane.showMessageDialog(this, mensaje);
@@ -96,76 +85,71 @@ public class D_FromCliente extends javax.swing.JFrame {
         }
         dispose();
     }
-    
-    private void registrarCliente (){
+
+    private void registrarCliente() {
         if (!validarDatos()) {
             return;
         }
-        String sql = "INSERT INTO cliente (dni, nombre, telefono) "+ "VALUES (?, ?, ?)";
-        
-        try(Connection con = conexionLiv.conectar()) {
+        String sql = "INSERT INTO cliente (dni, nombre, telefono) " + "VALUES (?, ?, ?)";
+
+        try (Connection con = conexionLiv.conectar()) {
             if (con == null) {
-               JOptionPane.showMessageDialog(this,"No se pudo conectar con la base de datos." );
-            return; 
+                JOptionPane.showMessageDialog(this, "No se pudo conectar con la base de datos.");
+                return;
             }
-            
-            try(PreparedStatement ps = con.prepareStatement(sql)) {
-              ps.setString(1, txtdni.getText().trim());
-              ps.setString(2, txtnombre.getText().trim());
-              ps.setString(3, txttelefono.getText().trim());
-              
-              int filas = ps.executeUpdate();
-                if (filas==1) {
-                    finalizarGuardado("Cliente registrado correctamente.");
-                }
-            } 
-            
-        } catch (SQLException e) {
-            if (e.getErrorCode()==1062) {
-                JOptionPane.showMessageDialog(this, "Ya existe un cliente con ese DNI.");
-            }else{
-                JOptionPane.showMessageDialog(this,"Error al registrar cliente: "+e.getMessage());
-            }
-        }
-    }
-     
-    public  void editarCliente(){
-        if (!validarDatos()) {
-            return;
-        }
-        String sql = "UPDATE cliente "+"SET dni = ?,nombre = ?, telefono = ? "+"WHERE id_cliente = ?" ;
-        
-        try(Connection con = conexionLiv.conectar()) {
-            if (con ==null) {
-               JOptionPane.showMessageDialog(this, "No se pudo conectar con la base de datos");
-               return;
-            }
-            try(PreparedStatement ps = con.prepareStatement(sql)) {
+
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
                 ps.setString(1, txtdni.getText().trim());
                 ps.setString(2, txtnombre.getText().trim());
                 ps.setString(3, txttelefono.getText().trim());
-                ps.setInt(4,idclienteEditar);
+
                 int filas = ps.executeUpdate();
-                
-                if (filas>0) {
+                if (filas == 1) {
+                    finalizarGuardado("Cliente registrado correctamente.");
+                }
+            }
+
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 1062) {
+                JOptionPane.showMessageDialog(this, "Ya existe un cliente con ese DNI.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al registrar cliente: " + e.getMessage());
+            }
+        }
+    }
+
+    public void editarCliente() {
+        if (!validarDatos()) {
+            return;
+        }
+        String sql = "UPDATE cliente " + "SET dni = ?,nombre = ?, telefono = ? " + "WHERE id_cliente = ?";
+
+        try (Connection con = conexionLiv.conectar()) {
+            if (con == null) {
+                JOptionPane.showMessageDialog(this, "No se pudo conectar con la base de datos");
+                return;
+            }
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setString(1, txtdni.getText().trim());
+                ps.setString(2, txtnombre.getText().trim());
+                ps.setString(3, txttelefono.getText().trim());
+                ps.setInt(4, idclienteEditar);
+                int filas = ps.executeUpdate();
+
+                if (filas > 0) {
                     finalizarGuardado("Cliente actualizado correctamente.");
-                }else{
-                    JOptionPane.showMessageDialog(this, "No se realizaron cambios. "+"Actualice la tabla para comprobar si el cliente todavia existe.");
-                }     
-            }      
+                } else {
+                    JOptionPane.showMessageDialog(this, "No se realizaron cambios. " + "Actualice la tabla para comprobar si el cliente todavia existe.");
+                }
+            }
         } catch (SQLException e) {
             if (e.getErrorCode() == 1062) {
                 JOptionPane.showMessageDialog(this, "Ese DNI ya pertenece a otro cliente");
-            }else{
-                JOptionPane.showMessageDialog(this, "Error al editar cliente: "+e.getMessage());
-            }       
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al editar cliente: " + e.getMessage());
+            }
         }
     }
-    
-    
-    
-    
-
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -313,18 +297,17 @@ public class D_FromCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_btnguardarMouseExited
 
     private void btnguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardarActionPerformed
-        if (idclienteEditar==0) {
+        if (idclienteEditar == 0) {
             registrarCliente();
-        }else{
+        } else {
             editarCliente();
         }
-        
+
     }//GEN-LAST:event_btnguardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
-
 
     public static void main(String args[]) {
 
