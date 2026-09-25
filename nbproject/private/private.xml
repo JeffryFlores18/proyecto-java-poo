@@ -3,22 +3,31 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Users/Usuario/Documents/JURADO%20NACIONAL%20DE%20ELECCIONES/proyecto-java-poo-reparado/proyecto-java-poo/src/Vistas_Tienda/ProveedorAgregar.java</file>
-            <file>file:/D:/Users/Usuario/Documents/JURADO%20NACIONAL%20DE%20ELECCIONES/proyecto-java-poo-reparado/proyecto-java-poo/src/Vistas_Tienda/ProveedorBuscarPorRuc.java</file>
-            <file>file:/D:/Users/Usuario/Documents/JURADO%20NACIONAL%20DE%20ELECCIONES/proyecto-java-poo-reparado/proyecto-java-poo/src/Vistas_Tienda/Proveedores.java</file>
-            <file>file:/D:/Users/Usuario/Documents/JURADO%20NACIONAL%20DE%20ELECCIONES/proyecto-java-poo-reparado/proyecto-java-poo/src/Vistas_Tienda/G_Reportes.java</file>
-            <file>file:/D:/Users/Usuario/Documents/JURADO%20NACIONAL%20DE%20ELECCIONES/proyecto-java-poo-reparado/proyecto-java-poo/src/Vistas_Tienda/ProveedorEditar.java</file>
-            <file>file:/D:/Users/Usuario/Documents/JURADO%20NACIONAL%20DE%20ELECCIONES/proyecto-java-poo-reparado/proyecto-java-poo/src/Vistas_Tienda/A_Dashboard.java</file>
-            <file>file:/D:/Users/Usuario/Documents/JURADO%20NACIONAL%20DE%20ELECCIONES/proyecto-java-poo-reparado/proyecto-java-poo/src/Vistas_Tienda/AA_Login.java</file>
-            <file>file:/D:/Users/Usuario/Documents/JURADO%20NACIONAL%20DE%20ELECCIONES/proyecto-java-poo-reparado/proyecto-java-poo/src/Vistas_Tienda/B_Resumen.java</file>
-            <file>file:/D:/Users/Usuario/Documents/JURADO%20NACIONAL%20DE%20ELECCIONES/proyecto-java-poo-reparado/proyecto-java-poo/src/Vistas_Tienda/C_Productos.java</file>
-            <file>file:/D:/Users/Usuario/Documents/JURADO%20NACIONAL%20DE%20ELECCIONES/proyecto-java-poo-reparado/proyecto-java-poo/src/Vistas_Tienda/C_Productos_DetallesProducto.java</file>
-            <file>file:/D:/Users/Usuario/Documents/JURADO%20NACIONAL%20DE%20ELECCIONES/proyecto-java-poo-reparado/proyecto-java-poo/src/Vistas_Tienda/C_Productos_Nuevo_Producto.java</file>
-            <file>file:/D:/Users/Usuario/Documents/JURADO%20NACIONAL%20DE%20ELECCIONES/proyecto-java-poo-reparado/proyecto-java-poo/src/Vistas_Tienda/D_Clientesp.java</file>
-            <file>file:/D:/Users/Usuario/Documents/JURADO%20NACIONAL%20DE%20ELECCIONES/proyecto-java-poo-reparado/proyecto-java-poo/src/Vistas_Tienda/D_FromCliente.java</file>
-            <file>file:/D:/Users/Usuario/Documents/JURADO%20NACIONAL%20DE%20ELECCIONES/proyecto-java-poo-reparado/proyecto-java-poo/src/Vistas_Tienda/D_clientees.java</file>
-            <file>file:/D:/Users/Usuario/Documents/JURADO%20NACIONAL%20DE%20ELECCIONES/proyecto-java-poo-reparado/proyecto-java-poo/src/Vistas_Tienda/E_Ventas.java</file>
-            <file>file:/D:/Users/Usuario/Documents/JURADO%20NACIONAL%20DE%20ELECCIONES/proyecto-java-poo-reparado/proyecto-java-poo/src/Vistas_Tienda/conexionLiv.java</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/CICLO5/proyecto-java-poo_LIVNAY/proyecto-java-pooLIVANY/src/Vistas_Tienda/D_Clientesp.java</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/CICLO5/proyecto-java-poo_LIVNAY/proyecto-java-pooLIVANY/src/Vistas_Tienda/AA_Login.java</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/CICLO5/proyecto-java-poo_LIVNAY/proyecto-java-pooLIVANY/src/Vistas_Tienda/A_Dashboard.java</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/CICLO5/proyecto-java-poo_LIVNAY/proyecto-java-pooLIVANY/src/Vistas_Tienda/conexionLiv.java</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/CICLO5/proyecto-java-poo_LIVNAY/proyecto-java-pooLIVANY/src/Vistas_Tienda/D_clientees.java</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/CICLO5/proyecto-java-poo_LIVNAY/proyecto-java-pooLIVANY/src/imagenClientes/usuarios.png</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/CICLO5/proyecto-java-poo_LIVNAY/proyecto-java-pooLIVANY/src/imagenClientes/reporte.png</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/CICLO5/proyecto-java-poo_LIVNAY/proyecto-java-pooLIVANY/src/imagenClientes/lapiz17.png</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/CICLO5/proyecto-java-poo_LIVNAY/proyecto-java-pooLIVANY/src/imagenClientes/iconoCliente68.png</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/CICLO5/proyecto-java-poo_LIVNAY/proyecto-java-pooLIVANY/src/imagenClientes/eliminar.png</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/CICLO5/proyecto-java-poo_LIVNAY/proyecto-java-pooLIVANY/src/imagenClientes/hora.png</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/CICLO5/proyecto-java-poo_LIVNAY/proyecto-java-pooLIVANY/src/imagenClientes/calendario.png</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/CICLO5/proyecto-java-poo_LIVNAY/proyecto-java-pooLIVANY/src/imagenClientes/buscar.png</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/CICLO5/proyecto-java-poo_LIVNAY/proyecto-java-pooLIVANY/src/imagenClientes/actualizar.png</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/CICLO5/proyecto-java-poo_LIVNAY/proyecto-java-pooLIVANY/src/Vistas_Tienda/E_Ventas.java</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/CICLO5/proyecto-java-poo_LIVNAY/proyecto-java-pooLIVANY/src/Vistas_Tienda/G_Reportes.java</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/CICLO5/proyecto-java-poo_LIVNAY/proyecto-java-pooLIVANY/src/Vistas_Tienda/C_Productos.java</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/CICLO5/proyecto-java-poo_LIVNAY/proyecto-java-pooLIVANY/src/Vistas_Tienda/E_Ventas_Agregar.java</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/CICLO5/proyecto-java-poo_LIVNAY/proyecto-java-pooLIVANY/src/Vistas_Tienda/B_Resumen.java</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/CICLO5/proyecto-java-poo_LIVNAY/proyecto-java-pooLIVANY/src/imagenClientes/Diseño%20sin%20título%20(1).png</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/CICLO5/proyecto-java-poo_LIVNAY/proyecto-java-pooLIVANY/src/imagenClientes/Log.png</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/CICLO5/proyecto-java-poo_LIVNAY/proyecto-java-pooLIVANY/src/imagenClientes/Style1.png</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/CICLO5/proyecto-java-poo_LIVNAY/proyecto-java-pooLIVANY/src/imagenClientes/logo1-convertido-a-100x100.jpeg</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/CICLO5/proyecto-java-poo_LIVNAY/proyecto-java-pooLIVANY/src/imagenClientes/logo1-convertido-a-40x40%20(1).jpeg</file>
+            <file>file:/C:/Users/PC/OneDrive/Desktop/CICLO5/proyecto-java-poo_LIVNAY/proyecto-java-pooLIVANY/src/imagenClientes/logo1.jpeg</file>
         </group>
     </open-files>
 </project-private>
