@@ -23,10 +23,11 @@ public class F_ProveedorAgregar extends javax.swing.JPanel {
         jLabel7 = new javax.swing.JLabel();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
-        txtRuc = new javax.swing.JTextField();
+        txtRazonSocial = new javax.swing.JTextField();
         txtTelefono = new javax.swing.JTextField();
         txtDireccion = new javax.swing.JTextField();
         txtEmail = new javax.swing.JTextField();
+        txtRuc = new javax.swing.JTextField();
 
         jPanel1.setBackground(new java.awt.Color(255, 247, 244));
         jPanel1.setPreferredSize(new java.awt.Dimension(800, 700));
@@ -75,12 +76,13 @@ public class F_ProveedorAgregar extends javax.swing.JPanel {
         btnCancelar.setText("CANCELAR");
         btnCancelar.addActionListener(this::btnCancelarActionPerformed);
         jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 490, 220, 70));
-        jPanel1.add(txtRuc, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 100, 530, 40));
+        jPanel1.add(txtRazonSocial, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 170, 530, 40));
         jPanel1.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 240, 530, 40));
         jPanel1.add(txtDireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 310, 530, 40));
 
         txtEmail.addActionListener(this::txtEmailActionPerformed);
-        jPanel1.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 380, 530, 40));
+        jPanel1.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 370, 530, 40));
+        jPanel1.add(txtRuc, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 100, 530, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -96,12 +98,12 @@ public class F_ProveedorAgregar extends javax.swing.JPanel {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         String ruc = txtRuc.getText();
-        String nombre = txtNombre.getText();
+        String razonSocial = txtRazonSocial.getText();
         String telefono = txtTelefono.getText();
         String direccion = txtDireccion.getText();
         String email = txtEmail.getText();
 
-        if (ruc.isEmpty() || nombre.isEmpty() || telefono.isEmpty()
+        if (ruc.isEmpty() || razonSocial.isEmpty() || telefono.isEmpty()
                 || direccion.isEmpty() || email.isEmpty()) {
 
             javax.swing.JOptionPane.showMessageDialog(
@@ -172,7 +174,7 @@ public class F_ProveedorAgregar extends javax.swing.JPanel {
                     = conexion.prepareStatement(sql);
 
             sentencia.setString(1, ruc);
-            sentencia.setString(2, nombre);
+            sentencia.setString(2, razonSocial);
             sentencia.setString(3, telefono);
             sentencia.setString(4, direccion);
             sentencia.setString(5, email);
@@ -188,7 +190,7 @@ public class F_ProveedorAgregar extends javax.swing.JPanel {
             );
 
             
-            txtRuc.setText("");
+            txtRazonSocial.setText("");
             txtNombre.setText("");
             txtTelefono.setText("");
             txtDireccion.setText("");
@@ -228,6 +230,7 @@ public class F_ProveedorAgregar extends javax.swing.JPanel {
     private javax.swing.JTextField txtDireccion;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtNombre;
+    private javax.swing.JTextField txtRazonSocial;
     private javax.swing.JTextField txtRuc;
     private javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
